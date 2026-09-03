@@ -156,7 +156,7 @@ sheet — "Runway (months) 38.6 → 5.2" — rather than a cell address.
 - **141 / 141** — every planted defect found by the right rule in the mutation benchmark,
   across six defect kinds and twelve base workbooks, each mutant recalculated by Excel.
 - **0** — findings across twelve clean workbooks totalling 1,368 formulas.
-- **113 tests**, green on Linux and Windows, Python 3.10 and 3.12, with no Excel installed.
+- **125 tests**, green on Linux and Windows, Python 3.10 and 3.12, with no Excel installed.
 
 ### What I learned
 

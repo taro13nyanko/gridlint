@@ -59,7 +59,9 @@ def _add_explanations(report, data) -> None:
     from . import explain
 
     for finding, out in zip(report.findings, data["findings"]):
-        ctx = f"Sheet {finding.sheet!r} of {Path(report.path).name}"
+        # The same deterministic context the web app uses, so a recorded fixture
+        # replays identically from either entry point.
+        ctx = explain.sheet_context(data["path"], finding.sheet)
         text, guard = explain.explain_finding(finding, sheet_context=ctx)
         out["explanation"] = text
         out["explanation_rejected"] = None if guard.ok else guard.offending

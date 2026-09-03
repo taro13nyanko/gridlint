@@ -269,7 +269,7 @@ gridlint/
   server.py         FastAPI: workspaces, uploads, runs, shared reports
   web/              one HTML file, one stylesheet, one script. No build step.
 bench/              corpus generator, mutation benchmark, results
-tests/              113 tests
+tests/              125 tests
 ```
 
 Design decisions worth knowing:
@@ -311,7 +311,7 @@ Longer notes: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 ## Tests
 
 ```bash
-python -m pytest -q          # 113 tests, about 40 seconds
+python -m pytest -q          # 125 tests, about 40 seconds
 ```
 
 They cover Excel's coercion and rounding rules directly, the graph and recalculation, each

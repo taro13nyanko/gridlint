@@ -221,7 +221,7 @@ lives in the `run` row so history is cheap to render.
 
 ## Testing
 
-113 tests, about 40 seconds, green on Linux and Windows across Python 3.10 and 3.12.
+125 tests, about 40 seconds, green on Linux and Windows across Python 3.10 and 3.12.
 
 - `test_formula.py` — coercion, precedence, rounding, the function semantics, in isolation.
 - `test_engine.py` — the conformance workbook against Excel, graph ordering, cycles, a
