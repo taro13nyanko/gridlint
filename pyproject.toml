@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gridlint"
+version = "0.4.0"
+description = "Find the spreadsheet mistake that costs the most, and prove the fix."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Yusuke Ota" }]
+keywords = ["spreadsheet", "excel", "xlsx", "audit", "linter", "finance"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Financial and Insurance Industry",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Office/Business :: Financial :: Spreadsheet",
+]
+dependencies = [
+  "openpyxl>=3.1,<4",
+  "fastapi>=0.110",
+  "uvicorn[standard]>=0.27",
+  "python-multipart>=0.0.9",
+  "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+anthropic = ["anthropic>=0.40"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+gridlint = "gridlint.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/taro13nyanko/gridlint"
+Source = "https://github.com/taro13nyanko/gridlint"
+
+[tool.setuptools]
+packages = ["gridlint", "gridlint.formula", "gridlint.rules"]
+
+[tool.setuptools.package-data]
+gridlint = ["web/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]

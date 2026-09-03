@@ -1,0 +1,14 @@
+{
+ "tag": "explain_v1",
+ "provider": "claude-cli",
+ "model": "claude-cli",
+ "text": "The 0 shown in Operating Model!C29 is not a real result: the calculation cannot be completed because it divides by a value that is zero or has not been filled in, and the formula quietly puts 0 in its place. That matters because a missing input now looks exactly like a genuine outcome of zero, so anyone reading this sheet has no signal that something still needs to be supplied. Before the model is used for decisions, confirm whether that divisor is truly zero or simply blank.",
+ "usage": {},
+ "system": "You explain spreadsheet defects to finance and operations people who are not Excel experts. You never compute or invent numbers: every figure you mention must already appear in the evidence you were given. You never claim something is wrong that the evidence does not state. Write plainly, in the second person, with no jargon and no exclamation marks.",
+ "messages": [
+  {
+   "role": "user",
+   "content": "A spreadsheet checker found this defect. Write ONE short paragraph (at most three sentences) telling the file's owner what is wrong and why it matters to them, in plain English. Mention the business consequence, not the Excel mechanics. Do not repeat the cell address more than once. Use only figures that appear in the JSON below.\n\nSheet context:\nWorkbook board-model.xlsx, sheet Operating Model. Figures are exactly as stored in the file.\n\nDefect:\n{\n \"cell\": \"Operating Model!C29\",\n \"formula\": \"=IFERROR(C8/Inputs!B7,0)\",\n \"what_the_detector_found\": \"Without the IFERROR, this cell would show #DIV/0!: something is divided by zero or by an empty cell. Instead it quietly shows 0.\",\n \"evidence\": {\n  \"hidden_error\": \"#DIV/0!\",\n  \"shown_instead\": 0\n },\n \"cells_affected\": 0,\n \"same_mistake_repeated_in\": 1,\n \"numbers_that_change_if_fixed\": [],\n \"suggested_fix\": null\n}"
+  }
+ ]
+}

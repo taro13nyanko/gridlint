@@ -1,0 +1,30 @@
+# Drop this into any repository that keeps a workbook under version control.
+# The build fails when a commit introduces a critical spreadsheet defect,
+# which is the same guarantee a linter gives you for code.
+name: spreadsheet check
+
+on:
+  pull_request:
+    paths: ["**/*.xlsx", "**/*.xlsm"]
+
+jobs:
+  gridlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install gridlint
+      - name: Check every workbook that changed
+        run: |
+          git fetch origin "${{ github.base_ref }}" --depth=1
+          changed=$(git diff --name-only "origin/${{ github.base_ref }}"... -- '*.xlsx' '*.xlsm')
+          [ -z "$changed" ] && exit 0
+          status=0
+          for f in $changed; do
+            echo "::group::$f"
+            gridlint check "$f" --fail-on critical || status=1
+            echo "::endgroup::"
+          done
+          exit $status

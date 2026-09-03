@@ -1,0 +1,14 @@
+{
+ "tag": "explain_v1",
+ "provider": "claude-cli",
+ "model": "claude-cli",
+ "text": "Your monthly cost total in Operating Model!C16 leaves out the Contractors line, so 185,000 of spending is never counted, and the same omission repeats in 12 of these totals across 30 cells. That makes the business look far healthier than it is: runway reads 38.6 months instead of 5.2, gross margin reads 0.062745 instead of -0.3, and cost per head reads 175,859 instead of 243,659. You are also showing a tax provision of 2,640 that should be 0, so anyone planning hiring or fundraising from this sheet is working from numbers that overstate both the time and the margin you have.",
+ "usage": {},
+ "system": "You explain spreadsheet defects to finance and operations people who are not Excel experts. You never compute or invent numbers: every figure you mention must already appear in the evidence you were given. You never claim something is wrong that the evidence does not state. Write plainly, in the second person, with no jargon and no exclamation marks.",
+ "messages": [
+  {
+   "role": "user",
+   "content": "A spreadsheet checker found this defect. Write ONE short paragraph (at most three sentences) telling the file's owner what is wrong and why it matters to them, in plain English. Mention the business consequence, not the Excel mechanics. Do not repeat the cell address more than once. Use only figures that appear in the JSON below.\n\nSheet context:\nWorkbook board-model.xlsx, sheet Operating Model. Figures are exactly as stored in the file.\n\nDefect:\n{\n \"cell\": \"Operating Model!C16\",\n \"formula\": \"=SUM(C11:C14)\",\n \"what_the_detector_found\": \"SUM covers C11:C14 but \\\"Contractors\\\" sits right below it and is left out. The same mistake is repeated in 12 cells (Operating Model!C16 to N16).\",\n \"evidence\": {\n  \"range\": \"C11:C14\",\n  \"missing_cell\": \"Operating Model!C15\",\n  \"missing_label\": \"Contractors\",\n  \"missing_value\": 185000,\n  \"function\": \"SUM\",\n  \"side\": \"after\"\n },\n \"cells_affected\": 30,\n \"same_mistake_repeated_in\": 12,\n \"numbers_that_change_if_fixed\": [\n  {\n   \"label\": \"Cost per head\",\n   \"from\": 175859,\n   \"to\": 243659\n  },\n  {\n   \"label\": \"Estimated tax provision\",\n   \"from\": 2640,\n   \"to\": 0\n  },\n  {\n   \"label\": \"Runway (months)\",\n   \"from\": 38.6,\n   \"to\": 5.2\n  },\n  {\n   \"label\": \"Gross margin\",\n   \"from\": 0.062745,\n   \"to\": -0.3\n  }\n ],\n \"suggested_fix\": \"=SUM(C11:C15)\"\n}"
+  }
+ ]
+}

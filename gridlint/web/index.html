@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gridlint — find the spreadsheet mistake that costs the most</title>
+<meta name="description" content="Gridlint recalculates your workbook, finds the formula defects that change the numbers, and proves each fix before you accept it.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f766e'/%3E%3Cpath d='M7 9h18M7 16h18M7 23h18M12 6v20M21 6v20' stroke='%23fff' stroke-width='1.6' opacity='.55'/%3E%3Ccircle cx='21' cy='16' r='4.6' fill='%23f43f5e'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="/" aria-label="Gridlint home">
+    <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true">
+      <rect width="32" height="32" rx="7" fill="var(--brand)"/>
+      <path d="M7 9h18M7 16h18M7 23h18M12 6v20M21 6v20" stroke="#fff" stroke-width="1.6" opacity=".55"/>
+      <circle cx="21" cy="16" r="4.6" fill="var(--danger)"/>
+    </svg>
+    <span>Gridlint</span>
+  </a>
+  <nav class="topnav">
+    <a href="#how">How it works</a>
+    <a href="#proof">Proof</a>
+    <a href="#pricing">Pricing</a>
+    <button id="nav-account" class="btn ghost sm">Sign in</button>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ---------------------------------------------------------------- landing -->
+  <section id="landing" class="view">
+    <div class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Spreadsheet review, measured in money</p>
+        <h1>Your model says <span class="strike">38.6 months</span> of runway.<br>It is <span class="hl">5.2</span>.</h1>
+        <p class="lede">
+          Gridlint reads the formulas in your workbook, recalculates every cell, and finds the
+          mistakes that quietly change the answer. Each one is ranked by how much money it moves,
+          and every fix is re-run and diffed before you are asked to accept it.
+        </p>
+        <div class="hero-actions">
+          <button class="btn primary" id="try-demo">Check the example model</button>
+          <button class="btn" id="pick-file">Check your own file</button>
+        </div>
+        <p class="fine">Nothing is uploaded when you use the example. Your own file stays on this
+          server and is never sent to a model.</p>
+      </div>
+
+      <div class="dropzone" id="dropzone" tabindex="0" role="button"
+           aria-label="Drop an .xlsx file here to check it">
+        <input type="file" id="file-input" accept=".xlsx,.xlsm" hidden>
+        <div class="dz-inner">
+          <svg viewBox="0 0 48 48" width="42" height="42" aria-hidden="true" class="dz-icon">
+            <rect x="8" y="5" width="32" height="38" rx="4" fill="none" stroke="currentColor" stroke-width="2.2"/>
+            <path d="M14 16h20M14 24h20M14 32h12" stroke="currentColor" stroke-width="2" opacity=".55"/>
+            <circle cx="34" cy="33" r="7" fill="var(--danger)"/>
+            <path d="M34 30v4M34 36.5v.5" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <p><strong>Drop an .xlsx here</strong></p>
+          <p class="fine">or click to choose &middot; up to 15 MB &middot; .xlsx and .xlsm</p>
+        </div>
+      </div>
+    </div>
+
+    <section class="strip" id="proof">
+      <div class="stat">
+        <span class="stat-n" id="stat-engine">93 / 93</span>
+        <span class="stat-l">formulas in the conformance suite where our engine matches Excel exactly</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">141 / 141</span>
+        <span class="stat-l">planted defects found by the right rule in the mutation benchmark</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">0</span>
+        <span class="stat-l">findings raised on 12 clean workbooks &mdash; 1,368 formulas of silence</span>
+      </div>
+    </section>
+
+    <section class="how" id="how">
+      <h2>What it actually does</h2>
+      <ol class="steps">
+        <li>
+          <h3>Reads the formulas, not the picture</h3>
+          <p>Every formula is parsed into a syntax tree and linked into a dependency graph, so
+             Gridlint knows which cells feed which.</p>
+        </li>
+        <li>
+          <h3>Recalculates the whole workbook</h3>
+          <p>Then it checks its own arithmetic against the values Excel or Sheets saved in the file.
+             If those disagree, it says so instead of guessing.</p>
+        </li>
+        <li>
+          <h3>Ranks defects by money, not by count</h3>
+          <p>Each fix is applied to a copy, the workbook is recomputed, and the difference is measured.
+             The number you see was calculated, not estimated.</p>
+        </li>
+        <li>
+          <h3>Explains it to whoever owns the file</h3>
+          <p>A language model writes the plain-English note. It never decides what is wrong and never
+             produces a number: any figure it cannot source from the evidence is rejected.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="pricing" id="pricing">
+      <h2>Pricing</h2>
+      <div class="tiers">
+        <div class="tier">
+          <h3>Free</h3>
+          <p class="price">$0</p>
+          <ul><li>One workbook</li><li>Every rule</li><li>Reports kept for 7 days</li></ul>
+        </div>
+        <div class="tier featured">
+          <h3>Team</h3>
+          <p class="price">$29<span>/editor/month</span></p>
+          <ul><li>Unlimited workbooks</li><li>History and re-checks</li><li>Shareable read-only reports</li><li>Download the corrected file</li></ul>
+        </div>
+        <div class="tier">
+          <h3>Close</h3>
+          <p class="price">$99<span>/month</span></p>
+          <ul><li>Scheduled re-checks</li><li>CI check for committed workbooks</li><li>Custom rule thresholds</li></ul>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ----------------------------------------------------------------- report -->
+  <section id="report" class="view" hidden>
+    <div class="report-head">
+      <div>
+        <button class="btn ghost sm" id="back-home">&larr; Check another file</button>
+        <h2 id="rep-name">workbook.xlsx</h2>
+        <p class="rep-sub" id="rep-sub"></p>
+      </div>
+      <div class="badges" id="rep-badges"></div>
+    </div>
+
+    <div class="headline" id="rep-headline" hidden>
+      <div class="headline-in">
+        <p class="headline-label">Biggest measured impact</p>
+        <p class="headline-text" id="headline-text"></p>
+        <ul class="headline-changes" id="headline-changes"></ul>
+      </div>
+    </div>
+
+    <div class="report-body">
+      <aside class="findings" aria-label="Findings">
+        <div class="findings-head">
+          <h3>Findings</h3>
+          <div class="filters" id="sev-filters"></div>
+        </div>
+        <ul id="finding-list"></ul>
+        <p class="empty" id="no-findings" hidden>No defects found in this workbook.</p>
+      </aside>
+
+      <section class="detail" id="detail" aria-live="polite"></section>
+    </div>
+
+    <section class="gridwrap">
+      <div class="grid-head">
+        <h3>Sheet</h3>
+        <div class="sheet-tabs" id="sheet-tabs"></div>
+        <label class="toggle"><input type="checkbox" id="show-formulas"> show formulas</label>
+      </div>
+      <div class="grid-scroll"><table class="grid" id="grid"></table></div>
+    </section>
+  </section>
+
+  <div id="loading" class="loading" hidden>
+    <div class="spinner" aria-hidden="true"></div>
+    <p id="loading-text">Reading formulas…</p>
+  </div>
+  <div id="toast" class="toast" hidden role="status"></div>
+</main>
+
+<dialog id="auth-dialog" class="dialog">
+  <form method="dialog" class="dialog-in" id="auth-form">
+    <h3 id="auth-title">Sign in</h3>
+    <p class="fine" id="auth-note">A workspace keeps your workbooks, their history, and shareable reports.</p>
+    <label>Email <input type="email" name="email" required autocomplete="email"></label>
+    <label>Password <input type="password" name="password" required minlength="8" autocomplete="current-password"></label>
+    <label id="ws-field">Workspace name <input type="text" name="workspace" value="My workspace"></label>
+    <p class="auth-error" id="auth-error" hidden></p>
+    <div class="dialog-actions">
+      <button type="button" class="btn ghost" id="auth-cancel">Cancel</button>
+      <button type="button" class="btn primary" id="auth-submit">Sign in</button>
+    </div>
+    <p class="fine"><a href="#" id="auth-switch">Create a workspace instead</a></p>
+  </form>
+</dialog>
+
+<footer class="foot">
+  <p>Gridlint &middot; <a href="https://github.com/taro13nyanko/gridlint">source</a> &middot;
+     built for the AI Builders Hackathon 2026</p>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

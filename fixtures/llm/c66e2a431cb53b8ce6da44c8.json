@@ -1,0 +1,14 @@
+{
+ "tag": "explain_v1",
+ "provider": "claude-cli",
+ "model": "claude-cli",
+ "text": "One cell in your Operating Model growth row, K13, uses a hard-typed 35 percent instead of pulling the growth rate from your assumptions, while the other ten steps in that row all read the rate from one place. Because 16 figures downstream depend on it, your cost per head is showing 175,859 rather than 171,393, and your runway is showing 38.6 months rather than 66.5 — so the model understates how much time you have. The same shortcut appears in one other spot, so it is worth correcting both before these numbers go to the board.",
+ "usage": {},
+ "system": "You explain spreadsheet defects to finance and operations people who are not Excel experts. You never compute or invent numbers: every figure you mention must already appear in the evidence you were given. You never claim something is wrong that the evidence does not state. Write plainly, in the second person, with no jargon and no exclamation marks.",
+ "messages": [
+  {
+   "role": "user",
+   "content": "A spreadsheet checker found this defect. Write ONE short paragraph (at most three sentences) telling the file's owner what is wrong and why it matters to them, in plain English. Mention the business consequence, not the Excel mechanics. Do not repeat the cell address more than once. Use only figures that appear in the JSON below.\n\nSheet context:\nWorkbook board-model.xlsx, sheet Operating Model. Figures are exactly as stored in the file.\n\nDefect:\n{\n \"cell\": \"Operating Model!K13\",\n \"formula\": \"=J13*1.35\",\n \"what_the_detector_found\": \"10 of 11 formulas in this row follow one pattern; K13 does something different.\",\n \"evidence\": {\n  \"pattern\": \"(R[0]C[-1]*(1+R13C2))\",\n  \"this\": \"(R[0]C[-1]*1.35)\",\n  \"run\": 11,\n  \"agreeing\": 10,\n  \"example\": \"Operating Model!D13\",\n  \"example_formula\": \"=C13*(1+$B$13)\"\n },\n \"cells_affected\": 16,\n \"same_mistake_repeated_in\": 1,\n \"numbers_that_change_if_fixed\": [\n  {\n   \"label\": \"Cost per head\",\n   \"from\": 175859,\n   \"to\": 171393\n  },\n  {\n   \"label\": \"Runway (months)\",\n   \"from\": 38.6,\n   \"to\": 66.5\n  }\n ],\n \"suggested_fix\": \"=J13*(1+$B$13)\"\n}"
+  }
+ ]
+}

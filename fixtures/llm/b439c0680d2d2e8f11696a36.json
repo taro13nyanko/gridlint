@@ -1,0 +1,14 @@
+{
+ "tag": "explain_v1",
+ "provider": "claude-cli",
+ "model": "claude-cli",
+ "text": "The total in Operating Model!C35 comes out about 38,500 too low, because the 38,500 sitting on the line at C33 was entered in a form the file treats as text instead of a number, so the total leaves it out. Nothing looks broken on screen — the figure simply reads smaller than the lines it is meant to add up. If you report that total or make decisions from it, you are working from an amount that is short by 38,500.",
+ "usage": {},
+ "system": "You explain spreadsheet defects to finance and operations people who are not Excel experts. You never compute or invent numbers: every figure you mention must already appear in the evidence you were given. You never claim something is wrong that the evidence does not state. Write plainly, in the second person, with no jargon and no exclamation marks.",
+ "messages": [
+  {
+   "role": "user",
+   "content": "A spreadsheet checker found this defect. Write ONE short paragraph (at most three sentences) telling the file's owner what is wrong and why it matters to them, in plain English. Mention the business consequence, not the Excel mechanics. Do not repeat the cell address more than once. Use only figures that appear in the JSON below.\n\nSheet context:\nWorkbook board-model.xlsx, sheet Operating Model. Figures are exactly as stored in the file.\n\nDefect:\n{\n \"cell\": \"Operating Model!C35\",\n \"formula\": \"=SUM(C32:C34)\",\n \"what_the_detector_found\": \"Operating Model!C33 holds text that looks like a number. SUM skips it, so about 38,500 is missing from this result.\",\n \"evidence\": {\n  \"cells\": [\n   \"Operating Model!C33\"\n  ],\n  \"values\": [\n   \"38,500\"\n  ],\n  \"missing_total\": 38500.0\n },\n \"cells_affected\": 0,\n \"same_mistake_repeated_in\": 1,\n \"numbers_that_change_if_fixed\": [],\n \"suggested_fix\": null\n}"
+  }
+ ]
+}

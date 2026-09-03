@@ -1,0 +1,14 @@
+{
+ "tag": "review_v1",
+ "provider": "claude-cli",
+ "model": "claude-cli",
+ "text": "Your file runway.xlsx was checked by recalculating every stored value independently, and all 69 of 69 cached values were reproduced (100.0%), which left one critical problem and no warnings. The critical problem is that the total in Model!C16 adds up only C11:C14 and misses the \"Contractors\" row sitting directly below that range, and the same omission repeats in six cells from Model!C16 to Model!H16; with Contractors included, the max month cost goes from 5,825,360.271107 to 6,281,605.109507, the min month cost goes from 4,780,000 to 5,155,000, and the figure labeled \"Abs check\" goes from 440,000 to 65,000. Please widen the sum in each of those six cells so it reaches the Contractors row, then recheck anything that reads from row 16 before these numbers are used again.",
+ "usage": {},
+ "system": "You explain spreadsheet defects to finance and operations people who are not Excel experts. You never compute or invent numbers: every figure you mention must already appear in the evidence you were given. You never claim something is wrong that the evidence does not state. Write plainly, in the second person, with no jargon and no exclamation marks.",
+ "messages": [
+  {
+   "role": "user",
+   "content": "Write a three-sentence note the reviewer can send to whoever owns this spreadsheet. Say what was checked, what the most serious problem is, and what to do next. No greeting, no sign-off, no bullet points. Use only figures that appear below.\n\n{\n \"file\": \"runway.xlsx\",\n \"critical\": 1,\n \"warnings\": 0,\n \"engine_agreement\": \"reproduced 69/69 cached values (100.0%)\",\n \"defects\": [\n  {\n   \"what\": \"Total leaves out a row of data\",\n   \"where\": \"Model!C16\",\n   \"detail\": \"SUM covers C11:C14 but \\\"Contractors\\\" sits right below it and is left out. The same mistake is repeated in 6 cells (Model!C16 to H16).\",\n   \"changes_if_fixed\": [\n    {\n     \"label\": \"Max month cost\",\n     \"from\": 5825360.271107,\n     \"to\": 6281605.109507\n    },\n    {\n     \"label\": \"Min month cost\",\n     \"from\": 4780000,\n     \"to\": 5155000\n    },\n    {\n     \"label\": \"Abs check\",\n     \"from\": 440000,\n     \"to\": 65000\n    }\n   ]\n  }\n ]\n}"
+  }
+ ]
+}

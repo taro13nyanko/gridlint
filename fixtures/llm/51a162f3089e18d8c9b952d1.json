@@ -1,0 +1,14 @@
+{
+ "tag": "explain_v1",
+ "provider": "claude-cli",
+ "model": "claude-cli",
+ "text": "The rate 0.0825 is typed directly inside the formula in Operating Model!C28, so nobody reading the model can see where that rate comes from or that it is there at all. Your current figures are not wrong because of this, but the moment that rate changes, someone has to go hunting through formulas to find it, and a missed copy quietly leaves the model reporting an out-of-date number. Move the rate into its own labelled cell so it is stated once, in plain sight, and can be updated in one place.",
+ "usage": {},
+ "system": "You explain spreadsheet defects to finance and operations people who are not Excel experts. You never compute or invent numbers: every figure you mention must already appear in the evidence you were given. You never claim something is wrong that the evidence does not state. Write plainly, in the second person, with no jargon and no exclamation marks.",
+ "messages": [
+  {
+   "role": "user",
+   "content": "A spreadsheet checker found this defect. Write ONE short paragraph (at most three sentences) telling the file's owner what is wrong and why it matters to them, in plain English. Mention the business consequence, not the Excel mechanics. Do not repeat the cell address more than once. Use only figures that appear in the JSON below.\n\nSheet context:\nWorkbook board-model.xlsx, sheet Operating Model. Figures are exactly as stored in the file.\n\nDefect:\n{\n \"cell\": \"Operating Model!C28\",\n \"formula\": \"=MAX(0,-C18*0.0825)\",\n \"what_the_detector_found\": \"The number 0.0825 is typed straight into this formula. Put it in its own labelled cell so it can be found and changed in one place.\",\n \"evidence\": {\n  \"literals\": [\n   0.0825\n  ]\n },\n \"cells_affected\": 0,\n \"same_mistake_repeated_in\": 1,\n \"numbers_that_change_if_fixed\": [],\n \"suggested_fix\": null\n}"
+  }
+ ]
+}

@@ -1,0 +1,13 @@
+# Runtime
+openpyxl>=3.1,<4
+fastapi>=0.110
+uvicorn[standard]>=0.27
+python-multipart>=0.0.9
+httpx>=0.27
+
+# Optional: only needed if you point Gridlint at Anthropic. Every other
+# provider (OpenAI, Groq, Gemini, Ollama) goes through the HTTP client above.
+anthropic>=0.40; python_version >= "3.10"
+
+# Development
+pytest>=8.0

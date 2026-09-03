@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.venv/
+data/
+bench/mutants/
+bench/last-run.log
+*.egg-info/
+.pytest_cache/
+.DS_Store
+~$*.xlsx

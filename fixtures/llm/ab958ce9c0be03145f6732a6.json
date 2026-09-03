@@ -1,0 +1,14 @@
+{
+ "tag": "explain_v1",
+ "provider": "claude-cli",
+ "model": "claude-cli",
+ "text": "The monthly total in Model!C16 stops one row short, so the Contractors line of 375,000 is never counted, and the same gap repeats in all six month columns. Your costs therefore look smaller than they are, and everything built on those totals shifts with them: gross margin reads 0.084291 when it should read 0.012452, and the number of expensive months shows 4 rather than 6. Anyone reading this file would conclude your spending is lower and your margin healthier than the corrected figures show.",
+ "usage": {},
+ "system": "You explain spreadsheet defects to finance and operations people who are not Excel experts. You never compute or invent numbers: every figure you mention must already appear in the evidence you were given. You never claim something is wrong that the evidence does not state. Write plainly, in the second person, with no jargon and no exclamation marks.",
+ "messages": [
+  {
+   "role": "user",
+   "content": "A spreadsheet checker found this defect. Write ONE short paragraph (at most three sentences) telling the file's owner what is wrong and why it matters to them, in plain English. Mention the business consequence, not the Excel mechanics. Do not repeat the cell address more than once. Use only figures that appear in the JSON below.\n\nSheet context:\nWorkbook runway.xlsx, sheet Model. Figures are exactly as stored in the file.\n\nDefect:\n{\n \"cell\": \"Model!C16\",\n \"formula\": \"=SUM(C11:C14)\",\n \"what_the_detector_found\": \"SUM covers C11:C14 but \\\"Contractors\\\" sits right below it and is left out. The same mistake is repeated in 6 cells (Model!C16 to H16).\",\n \"evidence\": {\n  \"range\": \"C11:C14\",\n  \"missing_cell\": \"Model!C15\",\n  \"missing_label\": \"Contractors\",\n  \"missing_value\": 375000,\n  \"function\": \"SUM\",\n  \"side\": \"after\"\n },\n \"cells_affected\": 20,\n \"same_mistake_repeated_in\": 6,\n \"numbers_that_change_if_fixed\": [\n  {\n   \"label\": \"Max month cost\",\n   \"from\": 5825360.271107,\n   \"to\": 6281605.109507\n  },\n  {\n   \"label\": \"Min month cost\",\n   \"from\": 4780000,\n   \"to\": 5155000\n  },\n  {\n   \"label\": \"Abs check\",\n   \"from\": 440000,\n   \"to\": 65000\n  },\n  {\n   \"label\": \"Cost per head\",\n   \"from\": 140588.235294,\n   \"to\": 151617.647059\n  },\n  {\n   \"label\": \"Big months\",\n   \"from\": 4,\n   \"to\": 6\n  },\n  {\n   \"label\": \"Gross margin\",\n   \"from\": 0.084291,\n   \"to\": 0.012452\n  }\n ],\n \"suggested_fix\": \"=SUM(C11:C15)\"\n}"
+  }
+ ]
+}

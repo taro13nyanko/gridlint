@@ -1,0 +1,31 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -r requirements.txt
+      - name: Run the test suite
+        run: python -m pytest -q
+      - name: The bundled clean workbook must produce no findings
+        run: python -m gridlint check samples/clean-model.xlsx
+      - name: The bundled broken workbook must fail the check
+        shell: bash
+        run: |
+          if python -m gridlint check samples/board-model.xlsx > /dev/null; then
+            echo "expected a non-zero exit for a workbook with critical defects"
+            exit 1
+          fi
