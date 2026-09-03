@@ -81,6 +81,7 @@ class Finding:
     group_size: int = 1
     group_cells: list[str] = field(default_factory=list)
     headline_changes: list[dict[str, Any]] = field(default_factory=list)
+    trace: list[dict[str, Any]] = field(default_factory=list)
 
     @property
     def id(self) -> str:
@@ -105,6 +106,7 @@ class Finding:
             "fix_diff": self.fix_diff[:12],
             "group_size": self.group_size, "group_cells": self.group_cells[:24],
             "headline_changes": self.headline_changes,
+            "trace": self.trace[:24],
         }
         if self.fix:
             d["fix"] = self.fix.to_dict()

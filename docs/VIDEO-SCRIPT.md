@@ -1,6 +1,6 @@
-# Demo video script — 4 minutes 40 seconds
+# Demo video script — 4 minutes 55 seconds
 
-Hard limit is 5 minutes. This runs to about 4:40, which leaves room to breathe.
+Hard limit is 5 minutes. This runs to about 4:55, which still leaves a little room.
 
 **Before you record**
 
@@ -112,7 +112,20 @@ impact. The model makes the report readable. It does not make it true."
 
 ---
 
-## 2:50 – 3:25  ·  The rest of the findings (screen: findings list)
+## 2:50 – 3:10  ·  Where the number comes from (screen: report detail, trace)
+
+> *(Scroll to the trace block.)*
+
+"One more thing the graph makes possible. This is the chain behind that runway figure —
+cost per head, from the full-year total, from the twelve monthly totals, down to the line
+items somebody typed. The highlighted rows are the ones that move when the fix lands.
+
+“Where does this number come from” is the question every reviewer asks, and this is the
+answer, drawn from the dependency graph rather than from a guess."
+
+---
+
+## 3:10 – 3:25  ·  The rest of the findings (screen: findings list)
 
 > *(Click through findings 2, 3 and 4 in the left list.)*
 
@@ -137,25 +150,28 @@ Contractors sitting right above it."
 
 > *(Switch to the terminal.)*
 
-"Three numbers, and you can run all of them from the repository.
+"Four numbers, and you can run all of them from the repository.
 
 *(paste: `python -m pytest tests/test_engine.py::test_conformance_workbook_matches_excel -q`)*
 
 One. The engine is not a guess at Excel. This test compares it against a workbook Excel
-itself generated — ninety-three formulas, including the ones people get wrong. In Excel,
-minus two squared is **positive four**. Two to the three to the two is **sixty-four**, not
-five hundred and twelve. `ROUND` two point five is **three**, not two. Ninety-three out of
-ninety-three.
+itself generated — a hundred and fifty-six formulas, including the ones people get wrong.
+In Excel, minus two squared is **positive four**. Two to the three to the two is
+**sixty-four**, not five hundred and twelve. `ROUND` two point five is **three**, not two.
+A hundred and fifty-six out of a hundred and fifty-six.
 
 *(show `bench/results.json` or the README table)*
 
-Two. A mutation benchmark: six kinds of defect planted into twelve clean workbooks, every
-mutant recalculated by Excel. **A hundred and forty-one out of a hundred and forty-one**
+Two. A mutation benchmark: eight kinds of defect planted into twelve clean workbooks, every
+mutant recalculated by Excel. **A hundred and eighty-two out of a hundred and eighty-two**
 found by the right rule.
 
-Three, and this one matters more: on those twelve clean workbooks — **zero findings**.
-Thirteen hundred and sixty-eight formulas of silence. A checker that cries wolf is one
-nobody keeps installed.
+Three, and this one matters more: on those twelve clean workbooks — **zero findings**. A
+thousand and fifty-nine formulas of silence. A checker that cries wolf is one nobody keeps
+installed.
+
+And it is fast enough to be useful: a twenty-three thousand formula model, audited end to
+end, in seven seconds.
 
 That benchmark also caught a real bug in Gridlint's own rounding while I was building it.
 That is what a benchmark is for."
@@ -188,8 +204,9 @@ It is open source, it runs with no API key, and the whole thing is at
 | 3 | 45 s | Report detail | verified badge, cell diff, `123/123` badge |
 | 4 | 45 s | Report + Explain | the written note appearing |
 | 5 | 35 s | Findings list + grid | findings 2–4, then formulas toggled on, row 16 red |
-| 6 | 45 s | Terminal | conformance test passing, benchmark table |
-| 7 | 30 s | Pricing / face | pricing tiers, repo URL on screen at the end |
+| 6 | 20 s | Report detail | the dependency trace, highlighted rows |
+| 7 | 45 s | Terminal | conformance test passing, benchmark table |
+| 8 | 30 s | Pricing / face | pricing tiers, repo URL on screen at the end |
 
 ## Things to avoid
 

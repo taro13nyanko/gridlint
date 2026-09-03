@@ -9,9 +9,9 @@ from __future__ import annotations
 
 from typing import Any, Protocol
 
-from .ast_nodes import (BinOp, ErrorLit, FuncCall, Literal, Name, Node,
-                        PostfixOp, RangeRef, Ref, UnaryOp)
-from .functions import FUNCTIONS, Matrix
+from .ast_nodes import (BinOp, ErrorLit, ExternalRef, FuncCall, Literal, Name, Node,
+                        PostfixOp, RangeRef, Ref, TableRef, UnaryOp)
+from .functions import FUNCTIONS, UNSUPPORTED, Matrix
 from .values import (BLANK, DIV0, NAME, NUM, REF, VALUE, Blank, ExcelError,
                      compare, to_bool, to_number, to_text)
 
@@ -25,6 +25,7 @@ class Resolver(Protocol):
     def used_bounds(self, sheet: str | None) -> tuple[int, int]: ...
     def sheet_exists(self, sheet: str) -> bool: ...
     def defined_name(self, name: str) -> Any: ...
+    def table_range(self, table: str, column: str | None) -> RangeRef | None: ...
 
 
 def _range_matrix(node: RangeRef, ctx: str | None, resolver: Resolver) -> Matrix:
@@ -52,7 +53,36 @@ def _scalar(v: Any) -> Any:
     return v
 
 
+def _broadcast(op, a: Any, b: Any):
+    """Apply a binary operator element by element when either side is a range.
+
+    This is what makes the SUMPRODUCT((range="x")*range) idiom work, which real
+    models lean on constantly because it predates SUMIFS.
+    """
+    if not isinstance(a, Matrix) and not isinstance(b, Matrix):
+        return None
+    left = a if isinstance(a, Matrix) else None
+    right = b if isinstance(b, Matrix) else None
+    rows = len(left or right)
+    cols = len((left or right)[0]) if rows else 0
+    if left is not None and right is not None and (len(left) != len(right)
+                                                   or (rows and len(left[0]) != len(right[0]))):
+        raise ExcelError(VALUE)
+    out = Matrix()
+    for r in range(rows):
+        row = []
+        for c in range(cols):
+            av = left[r][c] if left is not None else a
+            bv = right[r][c] if right is not None else b
+            row.append(op(av, bv))
+        out.append(row)
+    return out
+
+
 def _arith(op: str, a: Any, b: Any) -> Any:
+    broadcast = _broadcast(lambda x, y: _arith(op, x, y), a, b)
+    if broadcast is not None:
+        return broadcast
     x, y = to_number(_scalar(a)), to_number(_scalar(b))
     if op == "+":
         return x + y
@@ -96,6 +126,15 @@ def _eval(node: Node, ctx: str | None, r: Resolver) -> Any:
         return r.cell(node.sheet or ctx, node.col, node.row)
     if isinstance(node, RangeRef):
         return _range_matrix(node, ctx, r)
+    if isinstance(node, TableRef):
+        rng = r.table_range(node.table, node.column) if hasattr(r, "table_range") else None
+        if rng is None:
+            raise ExcelError(NAME)
+        return _range_matrix(rng, ctx, r)
+    if isinstance(node, ExternalRef):
+        # The value lives in a workbook this file does not contain. Guessing it
+        # would be worse than admitting we cannot compute it.
+        raise ExcelError(NAME)
     if isinstance(node, Name):
         v = r.defined_name(node.name)
         if v is None:
@@ -112,14 +151,24 @@ def _eval(node: Node, ctx: str | None, r: Resolver) -> Any:
         if op in ("+", "-", "*", "/", "^"):
             return _arith(op, a, b)
         if op == "&":
-            return to_text(_scalar(a)) + to_text(_scalar(b))
-        c = compare(_scalar(a), _scalar(b))
-        return {"=": c == 0, "<>": c != 0, "<": c < 0, "<=": c <= 0, ">": c > 0, ">=": c >= 0}[op]
+            joined = _broadcast(lambda x, y: to_text(x) + to_text(y), a, b)
+            return joined if joined is not None else to_text(_scalar(a)) + to_text(_scalar(b))
+
+        def cmp(x, y):
+            c = compare(x, y)
+            return {"=": c == 0, "<>": c != 0, "<": c < 0,
+                    "<=": c <= 0, ">": c > 0, ">=": c >= 0}[op]
+
+        compared = _broadcast(cmp, a, b)
+        return compared if compared is not None else cmp(_scalar(a), _scalar(b))
     if isinstance(node, FuncCall):
         fn = FUNCTIONS.get(node.name)
         if fn is None:
+            # Both an unknown name and a function Excel has but Gridlint does not
+            # model land here. Either way the honest answer is "no value", which
+            # the self-check counts as unmodelled rather than as a disagreement.
             raise ExcelError(NAME)
-        if node.name in ("IF", "IFERROR", "IFNA", "ISERROR"):
+        if node.name in ("IF", "IFERROR", "IFNA", "ISERROR", "ISNA", "ISERR"):
             return _eval_lazy(node, ctx, r)
         args = [_eval(a, ctx, r) for a in node.args]
         args = [a if isinstance(a, Matrix) else _scalar(a) for a in args]
@@ -148,10 +197,16 @@ def _eval_lazy(node: FuncCall, ctx: str | None, r: Resolver) -> Any:
         if isinstance(v, ExcelError) and (name == "IFERROR" or v.code == "#N/A"):
             return _scalar(_eval(node.args[1], ctx, r)) if len(node.args) > 1 else BLANK
         return v
-    if name == "ISERROR":
+    if name in ("ISERROR", "ISNA", "ISERR"):
         try:
             v = _scalar(_eval(node.args[0], ctx, r))
-        except ExcelError:
-            return True
-        return isinstance(v, ExcelError)
+        except ExcelError as e:
+            v = e
+        if not isinstance(v, ExcelError):
+            return False
+        if name == "ISNA":
+            return v.code == "#N/A"
+        if name == "ISERR":
+            return v.code != "#N/A"
+        return True
     raise ExcelError(VALUE)

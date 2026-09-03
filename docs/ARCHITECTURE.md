@@ -23,7 +23,7 @@ Everything below is the detail behind that sentence.
      │        ├─ validates the engine
      │        └─ detects a file saved without recalculating (R013)
      ▼
-  rules/    13 detectors ──► Finding{evidence, Fix}
+  rules/    15 detectors ──► Finding{evidence, Fix}
      │
      ▼
   audit.py  group repeats ──► for each Fix: recalc a copy, diff ──► impact in money
@@ -73,7 +73,7 @@ Excel's coercion rules, isolated so they can be tested alone:
 
 ### `functions.py`
 
-42 functions. The rule that matters most is Excel's asymmetry: **inside a range, text and
+90 functions. The rule that matters most is Excel's asymmetry: **inside a range, text and
 blanks are ignored; as a direct argument, text is coerced.**
 
 ```
@@ -120,6 +120,10 @@ sc = engine.self_check(wb)      # compares recalculated vs cached, cell by cell
 sc.agreement                    # 0.0 … 1.0
 sc.trustworthy                  # agreement >= 99.5% on a non-empty sample
 ```
+
+Comparison is date-aware: a date-formatted cell comes back from the file as a `datetime`
+while the engine computes the serial number underneath it, and those are the same value.
+Getting this wrong made every date formula look stale.
 
 Numeric comparison uses a **relative tolerance of 1e-9**. That was 1e-6 at first, which
 meant a $1 discrepancy on a $1,000,000 value counted as a match — the exact thing this tool
@@ -219,9 +223,38 @@ lives in the `run` row so history is cheap to render.
 
 ---
 
+## Performance
+
+Two passes in the original code were quadratic, and profiling a 23,000-formula model is
+what surfaced them:
+
+- `build_graph` rebuilt `set(order)` inside a list comprehension, once per formula.
+- `double_counting` (R009) scanned every cell of every summed range looking for a subtotal.
+  It now indexes the cells that contain a `SUM` by `(sheet, row)` and looks up only the
+  range's row window.
+
+Together those took the same workbook from 37 seconds to 7. The tokenizer also stopped
+trying the external-reference pattern at every character position, which alone cost more
+than the rest of lexing put together.
+
+The evaluator runs about **88,000 formulas per second**; roughly half of what remains is
+openpyxl reading the file twice, which is the price of having Excel's own values to compare
+against. `bench/perf.py` prints the stage-by-stage breakdown after a warm-up pass, so the
+figures are steady state rather than a measurement of Python's import cost.
+
+## The dependency trace
+
+`engine.trace()` walks backwards from a cell through the graph, breadth-first, returning
+each step with its row label, formula, value and depth. Given the set of cells a fix moves,
+it prunes the branches that do not move, so the chain shown is the chain that matters.
+
+The walk starts at the **headline change** rather than at the defect, because the number a
+reviewer is asking about is "runway", not "C16". Cycles cannot loop it: each cell is
+visited once, and both depth and step count are bounded.
+
 ## Testing
 
-125 tests, about 40 seconds, green on Linux and Windows across Python 3.10 and 3.12.
+151 tests, about 15 seconds, green on Linux and Windows across Python 3.10 and 3.12.
 
 - `test_formula.py` — coercion, precedence, rounding, the function semantics, in isolation.
 - `test_engine.py` — the conformance workbook against Excel, graph ordering, cycles, a
@@ -231,6 +264,10 @@ lives in the `run` row so history is cheap to render.
   rejection path of `propose_repair`.
 - `test_llm.py` — replay, cache keys, and fixture hygiene.
 - `test_server.py` — the API, including cross-workspace isolation and the corrected download.
+- `test_cli.py` — exit codes, `--fail-on` levels, and that `fix` never touches the original.
+- `test_real_world.py` — the things a real workbook contains: `_xlfn.` prefixes, array
+  idioms, dates as serials, table references, external links, hidden rows.
+- `test_trace.py` — the dependency walk, including that a cycle cannot make it loop.
 
 Excel is needed only to *regenerate* fixtures. The generated `.xlsx` files are committed, so
 CI runs without it.

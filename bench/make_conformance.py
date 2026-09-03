@@ -122,6 +122,75 @@ CASES: list[tuple[str, str]] = [
     ("cross sheet range", "=SUM(Data!B2:B5)"),
     ("quoted sheet name", "='Odd Sheet'!B2+1"),
     ("chain of refs", "=B2+B3+B4"),
+    # --- multi-criteria aggregates, which real models are built from ----------
+    ("sumifs one condition", '=SUMIFS($E$2:$E$11,$D$2:$D$11,"North")'),
+    ("sumifs two conditions", '=SUMIFS($E$2:$E$11,$D$2:$D$11,"North",$E$2:$E$11,">50")'),
+    ("sumifs no match", '=SUMIFS($E$2:$E$11,$D$2:$D$11,"Nowhere")'),
+    ("countifs one condition", '=COUNTIFS($D$2:$D$11,"South")'),
+    ("countifs two conditions", '=COUNTIFS($D$2:$D$11,"North",$E$2:$E$11,"<80")'),
+    ("countifs numeric range", '=COUNTIFS($E$2:$E$11,">=40",$E$2:$E$11,"<=90")'),
+    ("averageifs", '=AVERAGEIFS($E$2:$E$11,$D$2:$D$11,"North")'),
+    ("maxifs", '=MAXIFS($E$2:$E$11,$D$2:$D$11,"South")'),
+    ("minifs", '=MINIFS($E$2:$E$11,$D$2:$D$11,"North")'),
+    ("sumproduct two arrays", "=SUMPRODUCT($E$2:$E$6,$I$2:$I$6)"),
+    ("sumproduct as a condition", '=SUMPRODUCT(($D$2:$D$11="North")*$E$2:$E$11)'),
+    ("sumproduct single array", "=SUMPRODUCT($E$2:$E$11)"),
+    # --- logic and lookup ----------------------------------------------------
+    ("ifs first match", '=IFS($E$2>100,"big",$E$2>10,"mid",TRUE,"small")'),
+    ("ifs later match", '=IFS($E$3>100,"big",$E$3>10,"mid",TRUE,"small")'),
+    ("switch matched", '=SWITCH(2,1,"one",2,"two","other")'),
+    ("switch default", '=SWITCH(9,1,"one",2,"two","other")'),
+    ("choose", '=CHOOSE(2,"a","b","c")'),
+    ("xlookup exact", '=XLOOKUP("c",$H$2:$H$6,$I$2:$I$6)'),
+    ("xlookup not found", '=XLOOKUP("zz",$H$2:$H$6,$I$2:$I$6,"none")'),
+    ("xlookup next larger", "=XLOOKUP(35,$K$2:$K$6,$L$2:$L$6,\"none\",1)"),
+    ("hlookup exact", '=HLOOKUP("q2",$N$1:$Q$2,2,FALSE)'),
+    ("isna on lookup", '=ISNA(VLOOKUP("zz",$H$2:$I$6,2,FALSE))'),
+    ("na literal caught", "=IFNA(NA(),0)"),
+    # --- dates ---------------------------------------------------------------
+    ("date builds a serial", "=DATE(2026,9,3)*1"),
+    ("year month day", "=YEAR($M$2)*10000+MONTH($M$2)*100+DAY($M$2)"),
+    ("date arithmetic", "=$M$3-$M$2"),
+    ("eomonth this month", "=EOMONTH($M$2,0)-$M$2"),
+    ("eomonth previous", "=EOMONTH($M$2,-1)*1"),
+    ("edate plus three", "=EDATE($M$2,3)*1"),
+    ("days between", "=DAYS($M$3,$M$2)"),
+    ("weekday default", "=WEEKDAY($M$2)"),
+    ("weekday monday one", "=WEEKDAY($M$2,2)"),
+    ("datedif months", '=DATEDIF($M$2,$M$3,"m")'),
+    ("date rolls month overflow", "=DATE(2026,14,1)*1"),
+    # --- finance -------------------------------------------------------------
+    ("npv", "=ROUND(NPV(0.1,$E$2:$E$6),6)"),
+    ("npv plus initial", "=ROUND(NPV(0.08,$E$2:$E$6)-1000,6)"),
+    ("irr", "=ROUND(IRR($J$2:$J$7),6)"),
+    ("pmt", "=ROUND(PMT(0.05/12,360,-300000),6)"),
+    ("pmt zero rate", "=ROUND(PMT(0,120,-12000),6)"),
+    ("pv", "=ROUND(PV(0.06/12,120,-500),6)"),
+    ("fv", "=ROUND(FV(0.06/12,120,-500),6)"),
+    # --- maths ---------------------------------------------------------------
+    ("mod positive", "=MOD(17,5)"),
+    ("mod negative dividend", "=MOD(-17,5)"),
+    ("mod negative divisor", "=MOD(17,-5)"),
+    ("ceiling", "=CEILING(23,10)"),
+    ("ceiling exact", "=CEILING(20,10)"),
+    ("floor", "=FLOOR(27,10)"),
+    ("sign", "=SIGN(-4)+SIGN(0)+SIGN(9)"),
+    ("median odd", "=MEDIAN($E$2:$E$10)"),
+    ("median even", "=MEDIAN($E$2:$E$11)"),
+    ("stdev sample", "=ROUND(STDEV($E$2:$E$11),6)"),
+    ("large second", "=LARGE($E$2:$E$11,2)"),
+    ("small second", "=SMALL($E$2:$E$11,2)"),
+    # --- text ----------------------------------------------------------------
+    ("textjoin skipping blanks", '=TEXTJOIN("-",TRUE,$H$2:$H$6)'),
+    ("textjoin keeping blanks", '=TEXTJOIN("-",FALSE,$D$2:$D$4)'),
+    ("substitute all", '=SUBSTITUTE("a-b-a","a","X")'),
+    ("substitute nth", '=SUBSTITUTE("a-b-a","a","X",2)'),
+    ("replace", '=REPLACE("abcdef",2,3,"ZZ")'),
+    ("find is case sensitive", '=FIND("B","aBcB")'),
+    ("search is not", '=SEARCH("b","aBcB")'),
+    ("proper", '=PROPER("hello world")'),
+    ("rept", '=REPT("ab",3)'),
+    ("len of joined", '=LEN(TEXTJOIN(",",TRUE,$H$2:$H$6))'),
 ]
 
 # Support data placed on the Calc sheet.
@@ -132,6 +201,13 @@ H_VALUES = ["a", "b", "c", "d", "e"]
 I_VALUES = [10, 20, 30, 40, 50]
 K_VALUES = [0, 10, 30, 60, 100]
 L_VALUES = ["tiny", "small", "mid", "large", "huge"]
+#: A cash-flow series with a sign change, so IRR has a root to find.
+J_VALUES = [-1000, 250, 300, 350, 400, 450]
+#: Two dates, so the date functions have something real to work on.
+M_DATES = ["2026-03-15", "2027-01-04"]
+#: A horizontal table for HLOOKUP.
+HLOOKUP_HEADERS = ["q1", "q2", "q3", "q4"]
+HLOOKUP_VALUES = [11, 22, 33, 44]
 
 
 def main() -> int:
@@ -166,6 +242,16 @@ def main() -> int:
             calc.Cells(2 + i, 11).Value = v
         for i, v in enumerate(L_VALUES):
             calc.Cells(2 + i, 12).Value = v
+        for i, v in enumerate(J_VALUES):
+            calc.Cells(2 + i, 10).Value = v
+        import datetime as _dt
+        for i, iso in enumerate(M_DATES):
+            c = calc.Cells(2 + i, 13)
+            c.Value = _dt.datetime.strptime(iso, "%Y-%m-%d")
+            c.NumberFormat = "yyyy-mm-dd"
+        for i, (h, v) in enumerate(zip(HLOOKUP_HEADERS, HLOOKUP_VALUES)):
+            calc.Cells(1, 14 + i).Value = h
+            calc.Cells(2, 14 + i).Value = v
 
         for i, v in enumerate([7, 11, 13, 17]):
             data.Cells(2 + i, 2).Value = v

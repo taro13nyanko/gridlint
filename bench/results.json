@@ -14,21 +14,21 @@
   "clean-10.xlsx",
   "clean-11.xlsx"
  ],
- "mutants": 141,
+ "mutants": 182,
  "overall_recall": 1.0,
  "by_rule": {
   "R001": {
-   "planted": 23,
-   "found_by_the_right_rule": 23,
-   "recall": 1.0,
-   "ranked_first": 14,
-   "median_findings_per_file": 2
-  },
-  "R002": {
    "planted": 22,
    "found_by_the_right_rule": 22,
    "recall": 1.0,
-   "ranked_first": 22,
+   "ranked_first": 13,
+   "median_findings_per_file": 2
+  },
+  "R002": {
+   "planted": 16,
+   "found_by_the_right_rule": 16,
+   "recall": 1.0,
+   "ranked_first": 16,
    "median_findings_per_file": 2
   },
   "R006": {
@@ -43,7 +43,7 @@
    "found_by_the_right_rule": 24,
    "recall": 1.0,
    "ranked_first": 0,
-   "median_findings_per_file": 10
+   "median_findings_per_file": 11
   },
   "R008": {
    "planted": 24,
@@ -58,6 +58,20 @@
    "recall": 1.0,
    "ranked_first": 24,
    "median_findings_per_file": 2
+  },
+  "R014": {
+   "planted": 24,
+   "found_by_the_right_rule": 24,
+   "recall": 1.0,
+   "ranked_first": 24,
+   "median_findings_per_file": 2
+  },
+  "R015": {
+   "planted": 24,
+   "found_by_the_right_rule": 24,
+   "recall": 1.0,
+   "ranked_first": 24,
+   "median_findings_per_file": 6
   }
  },
  "clean_workbooks": {
@@ -287,42 +301,110 @@
    "total_findings": 1
   },
   {
-   "mutant": "clean-01-shrink_sum-0",
-   "kind": "R001",
-   "target": "Model!D19",
+   "mutant": "clean-00-external_link-0",
+   "kind": "R014",
+   "target": "Model!G16",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!D19",
-    "Model!D19"
+    "Model!G16",
+    "Model!G16"
    ],
-   "top_rule": "R001",
+   "top_rule": "R014",
    "rank_of_hit": 1,
+   "total_findings": 2
+  },
+  {
+   "mutant": "clean-00-external_link-1",
+   "kind": "R014",
+   "target": "Model!I23",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!I23",
+    "Model!I23"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 2
+  },
+  {
+   "mutant": "clean-00-hidden_row-0",
+   "kind": "R015",
+   "target": "Model!M11",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!N11",
+    "Model!M11",
+    "Model!L11",
+    "Model!K11",
+    "Model!J11",
+    "Model!I11",
+    "Model!H11",
+    "Model!G11"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 12
+  },
+  {
+   "mutant": "clean-00-hidden_row-1",
+   "kind": "R015",
+   "target": "Model!F11",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!N11",
+    "Model!M11",
+    "Model!L11",
+    "Model!K11",
+    "Model!J11",
+    "Model!I11",
+    "Model!H11",
+    "Model!G11"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 12
+  },
+  {
+   "mutant": "clean-01-shrink_sum-0",
+   "kind": "R001",
+   "target": "Model!G11",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!G11",
+    "Model!G11"
+   ],
+   "top_rule": "R002",
+   "rank_of_hit": 2,
    "total_findings": 2
   },
   {
    "mutant": "clean-01-shrink_sum-1",
    "kind": "R001",
-   "target": "Model!H19",
+   "target": "Model!I11",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!H19",
-    "Model!H19"
+    "Model!I11",
+    "Model!I11"
    ],
-   "top_rule": "R001",
-   "rank_of_hit": 1,
+   "top_rule": "R002",
+   "rank_of_hit": 2,
    "total_findings": 2
   },
   {
    "mutant": "clean-01-break_pattern-0",
    "kind": "R002",
-   "target": "Model!F19",
+   "target": "Model!I10",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!F19",
-    "Model!F19"
+    "Model!I10",
+    "Model!I10"
    ],
    "top_rule": "R002",
    "rank_of_hit": 1,
@@ -331,12 +413,12 @@
   {
    "mutant": "clean-01-break_pattern-1",
    "kind": "R002",
-   "target": "Model!F11",
+   "target": "Model!I18",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!F11",
-    "Model!F11"
+    "Model!I18",
+    "Model!I18"
    ],
    "top_rule": "R002",
    "rank_of_hit": 1,
@@ -358,11 +440,11 @@
   {
    "mutant": "clean-01-number_as_text-1",
    "kind": "R008",
-   "target": "Model!C11",
+   "target": "Model!C19",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C11"
+    "Model!C19"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -399,51 +481,51 @@
   {
    "mutant": "clean-01-missing_sheet-0",
    "kind": "R007",
-   "target": "Model!E14",
+   "target": "Model!M9",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!E14",
-    "Model!E14",
-    "Model!E14",
-    "Model!F14",
-    "Model!G14",
-    "Model!H14",
-    "Model!E19",
-    "Model!F19"
+    "Model!M9",
+    "Model!M9",
+    "Model!M9",
+    "Model!N9",
+    "Model!M11",
+    "Model!N11",
+    "Model!M21",
+    "Model!N21"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 22
+   "total_findings": 12
   },
   {
    "mutant": "clean-01-missing_sheet-1",
    "kind": "R007",
-   "target": "Model!E6",
+   "target": "Model!F19",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!E6",
-    "Model!E6",
-    "Model!E6",
-    "Model!F6",
-    "Model!G6",
-    "Model!H6",
-    "Model!E11",
-    "Model!F11"
+    "Model!F19",
+    "Model!F19",
+    "Model!F19",
+    "Model!F21",
+    "Model!C23",
+    "Model!C24",
+    "Model!C25",
+    "Model!F19"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 22
+   "total_findings": 8
   },
   {
    "mutant": "clean-01-circular-0",
    "kind": "R006",
-   "target": "Model!C36",
+   "target": "Model!C28",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C36"
+    "Model!C28"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
@@ -452,80 +534,118 @@
   {
    "mutant": "clean-01-circular-1",
    "kind": "R006",
-   "target": "Model!C36",
+   "target": "Model!C28",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C36"
+    "Model!C28"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
    "total_findings": 1
   },
   {
-   "mutant": "clean-02-shrink_sum-0",
-   "kind": "R001",
-   "target": "Model!E17",
+   "mutant": "clean-01-external_link-0",
+   "kind": "R014",
+   "target": "Model!L8",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!E17",
-    "Model!E17"
+    "Model!L8",
+    "Model!L8"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 2
+  },
+  {
+   "mutant": "clean-01-external_link-1",
+   "kind": "R014",
+   "target": "Model!L17",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!L17",
+    "Model!L17"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 2
+  },
+  {
+   "mutant": "clean-01-hidden_row-0",
+   "kind": "R015",
+   "target": "Model!L11",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!N11",
+    "Model!M11",
+    "Model!L11",
+    "Model!K11",
+    "Model!J11",
+    "Model!I11",
+    "Model!H11",
+    "Model!G11"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 12
+  },
+  {
+   "mutant": "clean-01-hidden_row-1",
+   "kind": "R015",
+   "target": "Model!M11",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!C11",
+    "Model!D11",
+    "Model!E11",
+    "Model!F11",
+    "Model!G11",
+    "Model!H11",
+    "Model!I11",
+    "Model!J11"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 12
+  },
+  {
+   "mutant": "clean-02-shrink_sum-0",
+   "kind": "R001",
+   "target": "Model!E10",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!E10"
    ],
    "top_rule": "R001",
    "rank_of_hit": 1,
-   "total_findings": 2
+   "total_findings": 1
   },
   {
    "mutant": "clean-02-shrink_sum-1",
    "kind": "R001",
-   "target": "Model!F24",
+   "target": "Model!D10",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!F24",
-    "Model!F24"
+    "Model!D10"
    ],
    "top_rule": "R001",
    "rank_of_hit": 1,
-   "total_findings": 2
-  },
-  {
-   "mutant": "clean-02-break_pattern-0",
-   "kind": "R002",
-   "target": "Model!F26",
-   "detected": true,
-   "detected_by_right_rule": true,
-   "reported_cells": [
-    "Model!F26",
-    "Model!F26"
-   ],
-   "top_rule": "R002",
-   "rank_of_hit": 1,
-   "total_findings": 2
-  },
-  {
-   "mutant": "clean-02-break_pattern-1",
-   "kind": "R002",
-   "target": "Model!F17",
-   "detected": true,
-   "detected_by_right_rule": true,
-   "reported_cells": [
-    "Model!F17",
-    "Model!F17"
-   ],
-   "top_rule": "R002",
-   "rank_of_hit": 1,
-   "total_findings": 2
+   "total_findings": 1
   },
   {
    "mutant": "clean-02-number_as_text-0",
    "kind": "R008",
-   "target": "Model!C17",
+   "target": "Model!C19",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C17"
+    "Model!C19"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -534,11 +654,11 @@
   {
    "mutant": "clean-02-number_as_text-1",
    "kind": "R008",
-   "target": "Model!C17",
+   "target": "Model!C19",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C17"
+    "Model!C19"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -551,12 +671,11 @@
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!D6",
     "Model!D6"
    ],
    "top_rule": "R012",
    "rank_of_hit": 1,
-   "total_findings": 2
+   "total_findings": 1
   },
   {
    "mutant": "clean-02-masked_error-1",
@@ -565,61 +684,59 @@
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!D6",
     "Model!D6"
    ],
    "top_rule": "R012",
    "rank_of_hit": 1,
-   "total_findings": 2
+   "total_findings": 1
   },
   {
    "mutant": "clean-02-missing_sheet-0",
    "kind": "R007",
-   "target": "Model!D13",
+   "target": "Model!D10",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!D13",
-    "Model!D13",
-    "Model!D13",
-    "Model!E13",
-    "Model!F13",
-    "Model!G13",
-    "Model!H13",
-    "Model!D17"
+    "Model!D10",
+    "Model!D10",
+    "Model!D21",
+    "Model!C23",
+    "Model!C24",
+    "Model!C25",
+    "Model!D10"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 26
+   "total_findings": 7
   },
   {
    "mutant": "clean-02-missing_sheet-1",
    "kind": "R007",
-   "target": "Model!H15",
+   "target": "Model!D17",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!H15",
-    "Model!H15",
-    "Model!H15",
-    "Model!H17",
-    "Model!H26",
-    "Model!C36",
-    "Model!C37",
-    "Model!C38"
+    "Model!D17",
+    "Model!D17",
+    "Model!E17",
+    "Model!D19",
+    "Model!E19",
+    "Model!D21",
+    "Model!E21",
+    "Model!C23"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 10
+   "total_findings": 11
   },
   {
    "mutant": "clean-02-circular-0",
    "kind": "R006",
-   "target": "Model!C41",
+   "target": "Model!C28",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C41"
+    "Model!C28"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
@@ -628,71 +745,84 @@
   {
    "mutant": "clean-02-circular-1",
    "kind": "R006",
-   "target": "Model!C41",
+   "target": "Model!C28",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C41"
+    "Model!C28"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
    "total_findings": 1
   },
   {
-   "mutant": "clean-03-shrink_sum-0",
-   "kind": "R001",
-   "target": "Model!E14",
+   "mutant": "clean-02-external_link-0",
+   "kind": "R014",
+   "target": "Model!D10",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!E14",
-    "Model!E14"
+    "Model!D10"
    ],
-   "top_rule": "R001",
+   "top_rule": "R014",
    "rank_of_hit": 1,
-   "total_findings": 2
+   "total_findings": 1
+  },
+  {
+   "mutant": "clean-02-external_link-1",
+   "kind": "R014",
+   "target": "Model!E10",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!E10"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 1
+  },
+  {
+   "mutant": "clean-02-hidden_row-0",
+   "kind": "R015",
+   "target": "Model!C10",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!E10",
+    "Model!D10",
+    "Model!C10"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 3
+  },
+  {
+   "mutant": "clean-02-hidden_row-1",
+   "kind": "R015",
+   "target": "Model!C10",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!E10",
+    "Model!D10",
+    "Model!C10"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 3
   },
   {
    "mutant": "clean-03-shrink_sum-1",
    "kind": "R001",
-   "target": "Model!G9",
+   "target": "Model!E9",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!G9",
-    "Model!G9"
+    "Model!E9"
    ],
    "top_rule": "R001",
    "rank_of_hit": 1,
-   "total_findings": 2
-  },
-  {
-   "mutant": "clean-03-break_pattern-0",
-   "kind": "R002",
-   "target": "Model!F9",
-   "detected": true,
-   "detected_by_right_rule": true,
-   "reported_cells": [
-    "Model!F9",
-    "Model!F9"
-   ],
-   "top_rule": "R002",
-   "rank_of_hit": 1,
-   "total_findings": 2
-  },
-  {
-   "mutant": "clean-03-break_pattern-1",
-   "kind": "R002",
-   "target": "Model!F14",
-   "detected": true,
-   "detected_by_right_rule": true,
-   "reported_cells": [
-    "Model!F14",
-    "Model!F14"
-   ],
-   "top_rule": "R002",
-   "rank_of_hit": 1,
-   "total_findings": 2
+   "total_findings": 1
   },
   {
    "mutant": "clean-03-number_as_text-0",
@@ -710,11 +840,11 @@
   {
    "mutant": "clean-03-number_as_text-1",
    "kind": "R008",
-   "target": "Model!C14",
+   "target": "Model!C9",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C14"
+    "Model!C9"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -727,12 +857,11 @@
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!D6",
     "Model!D6"
    ],
    "top_rule": "R012",
    "rank_of_hit": 1,
-   "total_findings": 2
+   "total_findings": 1
   },
   {
    "mutant": "clean-03-masked_error-1",
@@ -741,59 +870,58 @@
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!D6",
     "Model!D6"
    ],
    "top_rule": "R012",
    "rank_of_hit": 1,
-   "total_findings": 2
+   "total_findings": 1
   },
   {
    "mutant": "clean-03-missing_sheet-0",
    "kind": "R007",
-   "target": "Model!H8",
+   "target": "Model!D7",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!H8",
-    "Model!H8",
-    "Model!H8",
-    "Model!H9",
-    "Model!H16",
-    "Model!C18",
-    "Model!H8"
+    "Model!D7",
+    "Model!D7",
+    "Model!E7",
+    "Model!D9",
+    "Model!E9",
+    "Model!D18",
+    "Model!E18",
+    "Model!C20"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 7
+   "total_findings": 9
   },
   {
    "mutant": "clean-03-missing_sheet-1",
    "kind": "R007",
-   "target": "Model!H6",
+   "target": "Model!E13",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!H6",
-    "Model!H6",
-    "Model!H6",
-    "Model!H9",
-    "Model!H16",
-    "Model!C18",
-    "Model!H6"
+    "Model!E13",
+    "Model!E13",
+    "Model!E16",
+    "Model!E18",
+    "Model!C20",
+    "Model!E13"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 7
+   "total_findings": 6
   },
   {
    "mutant": "clean-03-circular-0",
    "kind": "R006",
-   "target": "Model!C21",
+   "target": "Model!C23",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C21"
+    "Model!C23"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
@@ -802,53 +930,109 @@
   {
    "mutant": "clean-03-circular-1",
    "kind": "R006",
-   "target": "Model!C21",
+   "target": "Model!C23",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C21"
+    "Model!C23"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
    "total_findings": 1
   },
   {
-   "mutant": "clean-04-shrink_sum-0",
-   "kind": "R001",
-   "target": "Model!H12",
+   "mutant": "clean-03-external_link-0",
+   "kind": "R014",
+   "target": "Model!D8",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!H12",
-    "Model!H12"
+    "Model!D8"
    ],
-   "top_rule": "R001",
+   "top_rule": "R014",
    "rank_of_hit": 1,
+   "total_findings": 1
+  },
+  {
+   "mutant": "clean-03-external_link-1",
+   "kind": "R014",
+   "target": "Model!D9",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!D9"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 1
+  },
+  {
+   "mutant": "clean-03-hidden_row-0",
+   "kind": "R015",
+   "target": "Model!C16",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!E16",
+    "Model!D16",
+    "Model!C16"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 3
+  },
+  {
+   "mutant": "clean-03-hidden_row-1",
+   "kind": "R015",
+   "target": "Model!E16",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!E16",
+    "Model!D16",
+    "Model!C16"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 3
+  },
+  {
+   "mutant": "clean-04-shrink_sum-0",
+   "kind": "R001",
+   "target": "Model!G9",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!G9",
+    "Model!G9"
+   ],
+   "top_rule": "R002",
+   "rank_of_hit": 2,
    "total_findings": 2
   },
   {
    "mutant": "clean-04-shrink_sum-1",
    "kind": "R001",
-   "target": "Model!C12",
+   "target": "Model!C9",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C12",
-    "Model!C12"
+    "Model!C9",
+    "Model!C9"
    ],
-   "top_rule": "R001",
-   "rank_of_hit": 1,
+   "top_rule": "R002",
+   "rank_of_hit": 2,
    "total_findings": 2
   },
   {
    "mutant": "clean-04-break_pattern-0",
    "kind": "R002",
-   "target": "Model!F28",
+   "target": "Model!I8",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!F28",
-    "Model!F28"
+    "Model!I8",
+    "Model!I8"
    ],
    "top_rule": "R002",
    "rank_of_hit": 1,
@@ -857,12 +1041,12 @@
   {
    "mutant": "clean-04-break_pattern-1",
    "kind": "R002",
-   "target": "Model!F12",
+   "target": "Model!I9",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!F12",
-    "Model!F12"
+    "Model!I9",
+    "Model!I9"
    ],
    "top_rule": "R002",
    "rank_of_hit": 1,
@@ -871,11 +1055,11 @@
   {
    "mutant": "clean-04-number_as_text-0",
    "kind": "R008",
-   "target": "Model!C12",
+   "target": "Model!C9",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C12"
+    "Model!C9"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -884,11 +1068,11 @@
   {
    "mutant": "clean-04-number_as_text-1",
    "kind": "R008",
-   "target": "Model!C12",
+   "target": "Model!C9",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C12"
+    "Model!C9"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -925,51 +1109,51 @@
   {
    "mutant": "clean-04-missing_sheet-0",
    "kind": "R007",
-   "target": "Model!H23",
+   "target": "Model!J6",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!H23",
-    "Model!H23",
-    "Model!H23",
-    "Model!H28",
-    "Model!H30",
-    "Model!C39",
-    "Model!C40",
-    "Model!C41"
+    "Model!J6",
+    "Model!J6",
+    "Model!J6",
+    "Model!K6",
+    "Model!L6",
+    "Model!M6",
+    "Model!N6",
+    "Model!J9"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 9
+   "total_findings": 21
   },
   {
    "mutant": "clean-04-missing_sheet-1",
    "kind": "R007",
-   "target": "Model!E25",
+   "target": "Model!E7",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!E25",
-    "Model!E25",
-    "Model!E25",
-    "Model!F25",
-    "Model!G25",
-    "Model!H25",
-    "Model!E28",
-    "Model!F28"
+    "Model!E7",
+    "Model!E7",
+    "Model!E7",
+    "Model!F7",
+    "Model!G7",
+    "Model!H7",
+    "Model!I7",
+    "Model!J7"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 18
+   "total_findings": 36
   },
   {
    "mutant": "clean-04-circular-0",
    "kind": "R006",
-   "target": "Model!C44",
+   "target": "Model!C17",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C44"
+    "Model!C17"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
@@ -978,53 +1162,121 @@
   {
    "mutant": "clean-04-circular-1",
    "kind": "R006",
-   "target": "Model!C44",
+   "target": "Model!C17",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C44"
+    "Model!C17"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
    "total_findings": 1
   },
   {
-   "mutant": "clean-05-shrink_sum-0",
-   "kind": "R001",
-   "target": "Model!K18",
+   "mutant": "clean-04-external_link-0",
+   "kind": "R014",
+   "target": "Model!M9",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!K18",
-    "Model!K18"
+    "Model!M9",
+    "Model!M9"
    ],
-   "top_rule": "R002",
-   "rank_of_hit": 2,
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 2
+  },
+  {
+   "mutant": "clean-04-external_link-1",
+   "kind": "R014",
+   "target": "Model!I10",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!I10",
+    "Model!I10"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 2
+  },
+  {
+   "mutant": "clean-04-hidden_row-0",
+   "kind": "R015",
+   "target": "Model!H9",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!N9",
+    "Model!M9",
+    "Model!L9",
+    "Model!K9",
+    "Model!J9",
+    "Model!I9",
+    "Model!H9",
+    "Model!G9"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 12
+  },
+  {
+   "mutant": "clean-04-hidden_row-1",
+   "kind": "R015",
+   "target": "Model!E9",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!N9",
+    "Model!M9",
+    "Model!L9",
+    "Model!K9",
+    "Model!J9",
+    "Model!I9",
+    "Model!H9",
+    "Model!G9"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 12
+  },
+  {
+   "mutant": "clean-05-shrink_sum-0",
+   "kind": "R001",
+   "target": "Model!G12",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!G12",
+    "Model!G12"
+   ],
+   "top_rule": "R001",
+   "rank_of_hit": 1,
    "total_findings": 2
   },
   {
    "mutant": "clean-05-shrink_sum-1",
    "kind": "R001",
-   "target": "Model!E10",
+   "target": "Model!D12",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!E10",
-    "Model!E10"
+    "Model!D12",
+    "Model!D12"
    ],
-   "top_rule": "R002",
-   "rank_of_hit": 2,
+   "top_rule": "R001",
+   "rank_of_hit": 1,
    "total_findings": 2
   },
   {
    "mutant": "clean-05-break_pattern-0",
    "kind": "R002",
-   "target": "Model!I16",
+   "target": "Model!F12",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!I16",
-    "Model!I16"
+    "Model!F12",
+    "Model!F12"
    ],
    "top_rule": "R002",
    "rank_of_hit": 1,
@@ -1033,12 +1285,12 @@
   {
    "mutant": "clean-05-break_pattern-1",
    "kind": "R002",
-   "target": "Model!I17",
+   "target": "Model!F12",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!I17",
-    "Model!I17"
+    "Model!F12",
+    "Model!F12"
    ],
    "top_rule": "R002",
    "rank_of_hit": 1,
@@ -1047,11 +1299,11 @@
   {
    "mutant": "clean-05-number_as_text-0",
    "kind": "R008",
-   "target": "Model!C10",
+   "target": "Model!C12",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C10"
+    "Model!C12"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -1060,11 +1312,11 @@
   {
    "mutant": "clean-05-number_as_text-1",
    "kind": "R008",
-   "target": "Model!C10",
+   "target": "Model!C12",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C10"
+    "Model!C12"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -1101,50 +1353,51 @@
   {
    "mutant": "clean-05-missing_sheet-0",
    "kind": "R007",
-   "target": "Model!N14",
+   "target": "Model!D8",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!N14",
-    "Model!N14",
-    "Model!N14",
-    "Model!N18",
-    "Model!N20",
-    "Model!C22",
-    "Model!C23",
-    "Model!C24"
+    "Model!D8",
+    "Model!D8",
+    "Model!D8",
+    "Model!E8",
+    "Model!F8",
+    "Model!G8",
+    "Model!H8",
+    "Model!D12"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 9
+   "total_findings": 16
   },
   {
    "mutant": "clean-05-missing_sheet-1",
    "kind": "R007",
-   "target": "Model!F20",
+   "target": "Model!H9",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!F20",
-    "Model!F20",
-    "Model!F20",
-    "Model!C22",
-    "Model!C23",
-    "Model!C24",
-    "Model!F20"
+    "Model!H9",
+    "Model!H9",
+    "Model!H9",
+    "Model!H12",
+    "Model!C14",
+    "Model!C15",
+    "Model!C16",
+    "Model!H9"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 7
+   "total_findings": 8
   },
   {
    "mutant": "clean-05-circular-0",
    "kind": "R006",
-   "target": "Model!C27",
+   "target": "Model!C19",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C27"
+    "Model!C19"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
@@ -1153,25 +1406,88 @@
   {
    "mutant": "clean-05-circular-1",
    "kind": "R006",
-   "target": "Model!C27",
+   "target": "Model!C19",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C27"
+    "Model!C19"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
    "total_findings": 1
   },
   {
-   "mutant": "clean-06-shrink_sum-0",
-   "kind": "R001",
-   "target": "Model!N19",
+   "mutant": "clean-05-external_link-0",
+   "kind": "R014",
+   "target": "Model!F7",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!N19",
-    "Model!N19"
+    "Model!F7",
+    "Model!F7"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 2
+  },
+  {
+   "mutant": "clean-05-external_link-1",
+   "kind": "R014",
+   "target": "Model!C16",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!C16"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 1
+  },
+  {
+   "mutant": "clean-05-hidden_row-0",
+   "kind": "R015",
+   "target": "Model!G12",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!H12",
+    "Model!G12",
+    "Model!F12",
+    "Model!E12",
+    "Model!D12",
+    "Model!C12"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 6
+  },
+  {
+   "mutant": "clean-05-hidden_row-1",
+   "kind": "R015",
+   "target": "Model!C12",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!H12",
+    "Model!G12",
+    "Model!F12",
+    "Model!E12",
+    "Model!D12",
+    "Model!C12"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 6
+  },
+  {
+   "mutant": "clean-06-shrink_sum-0",
+   "kind": "R001",
+   "target": "Model!N9",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!N9",
+    "Model!N9"
    ],
    "top_rule": "R002",
    "rank_of_hit": 2,
@@ -1180,12 +1496,12 @@
   {
    "mutant": "clean-06-shrink_sum-1",
    "kind": "R001",
-   "target": "Model!E26",
+   "target": "Model!F23",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!E26",
-    "Model!E26"
+    "Model!F23",
+    "Model!F23"
    ],
    "top_rule": "R002",
    "rank_of_hit": 2,
@@ -1194,12 +1510,12 @@
   {
    "mutant": "clean-06-break_pattern-0",
    "kind": "R002",
-   "target": "Model!I16",
+   "target": "Model!I9",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!I16",
-    "Model!I16"
+    "Model!I9",
+    "Model!I9"
    ],
    "top_rule": "R002",
    "rank_of_hit": 1,
@@ -1208,12 +1524,12 @@
   {
    "mutant": "clean-06-break_pattern-1",
    "kind": "R002",
-   "target": "Model!I6",
+   "target": "Model!I8",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!I6",
-    "Model!I6"
+    "Model!I8",
+    "Model!I8"
    ],
    "top_rule": "R002",
    "rank_of_hit": 1,
@@ -1222,11 +1538,11 @@
   {
    "mutant": "clean-06-number_as_text-0",
    "kind": "R008",
-   "target": "Model!C26",
+   "target": "Model!C9",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C26"
+    "Model!C9"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -1235,11 +1551,11 @@
   {
    "mutant": "clean-06-number_as_text-1",
    "kind": "R008",
-   "target": "Model!C19",
+   "target": "Model!C9",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C19"
+    "Model!C9"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -1276,51 +1592,47 @@
   {
    "mutant": "clean-06-missing_sheet-0",
    "kind": "R007",
-   "target": "Model!K8",
+   "target": "Model!K26",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!K8",
-    "Model!K8",
-    "Model!K8",
-    "Model!L8",
-    "Model!M8",
-    "Model!N8",
-    "Model!K11",
-    "Model!L11"
+    "Model!K26",
+    "Model!K26",
+    "Model!K26",
+    "Model!K26"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 16
+   "total_findings": 4
   },
   {
    "mutant": "clean-06-missing_sheet-1",
    "kind": "R007",
-   "target": "Model!K22",
+   "target": "Model!I22",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!K22",
-    "Model!K22",
+    "Model!I22",
+    "Model!I22",
+    "Model!I22",
+    "Model!J22",
     "Model!K22",
     "Model!L22",
     "Model!M22",
-    "Model!N22",
-    "Model!K26",
-    "Model!L26"
+    "Model!N22"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 16
+   "total_findings": 28
   },
   {
    "mutant": "clean-06-circular-0",
    "kind": "R006",
-   "target": "Model!C33",
+   "target": "Model!C31",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C33"
+    "Model!C31"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
@@ -1329,53 +1641,121 @@
   {
    "mutant": "clean-06-circular-1",
    "kind": "R006",
-   "target": "Model!C33",
+   "target": "Model!C31",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C33"
+    "Model!C31"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
    "total_findings": 1
   },
   {
-   "mutant": "clean-07-shrink_sum-0",
-   "kind": "R001",
-   "target": "Model!C12",
+   "mutant": "clean-06-external_link-0",
+   "kind": "R014",
+   "target": "Model!J12",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C12",
-    "Model!C12"
+    "Model!J12",
+    "Model!J12"
    ],
-   "top_rule": "R002",
-   "rank_of_hit": 2,
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 2
+  },
+  {
+   "mutant": "clean-06-external_link-1",
+   "kind": "R014",
+   "target": "Model!K13",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!K13",
+    "Model!K13"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 2
+  },
+  {
+   "mutant": "clean-06-hidden_row-0",
+   "kind": "R015",
+   "target": "Model!N23",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!N23",
+    "Model!M23",
+    "Model!L23",
+    "Model!K23",
+    "Model!J23",
+    "Model!I23",
+    "Model!H23",
+    "Model!G23"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 12
+  },
+  {
+   "mutant": "clean-06-hidden_row-1",
+   "kind": "R015",
+   "target": "Model!K9",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!N9",
+    "Model!M9",
+    "Model!L9",
+    "Model!K9",
+    "Model!J9",
+    "Model!I9",
+    "Model!H9",
+    "Model!G9"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 12
+  },
+  {
+   "mutant": "clean-07-shrink_sum-0",
+   "kind": "R001",
+   "target": "Model!C11",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!C11",
+    "Model!C11"
+   ],
+   "top_rule": "R001",
+   "rank_of_hit": 1,
    "total_findings": 2
   },
   {
    "mutant": "clean-07-shrink_sum-1",
    "kind": "R001",
-   "target": "Model!I12",
+   "target": "Model!C11",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!I12",
-    "Model!I12"
+    "Model!C11",
+    "Model!C11"
    ],
-   "top_rule": "R002",
-   "rank_of_hit": 2,
+   "top_rule": "R001",
+   "rank_of_hit": 1,
    "total_findings": 2
   },
   {
    "mutant": "clean-07-break_pattern-0",
    "kind": "R002",
-   "target": "Model!I7",
+   "target": "Model!F11",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!I7",
-    "Model!I7"
+    "Model!F11",
+    "Model!F11"
    ],
    "top_rule": "R002",
    "rank_of_hit": 1,
@@ -1384,12 +1764,12 @@
   {
    "mutant": "clean-07-break_pattern-1",
    "kind": "R002",
-   "target": "Model!I9",
+   "target": "Model!F11",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!I9",
-    "Model!I9"
+    "Model!F11",
+    "Model!F11"
    ],
    "top_rule": "R002",
    "rank_of_hit": 1,
@@ -1398,11 +1778,11 @@
   {
    "mutant": "clean-07-number_as_text-0",
    "kind": "R008",
-   "target": "Model!C21",
+   "target": "Model!C11",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C21"
+    "Model!C11"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -1411,11 +1791,11 @@
   {
    "mutant": "clean-07-number_as_text-1",
    "kind": "R008",
-   "target": "Model!C12",
+   "target": "Model!C11",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C12"
+    "Model!C11"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -1452,49 +1832,48 @@
   {
    "mutant": "clean-07-missing_sheet-0",
    "kind": "R007",
-   "target": "Model!J21",
+   "target": "Model!D7",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!J21",
-    "Model!J21",
-    "Model!J21",
-    "Model!J23",
-    "Model!C25",
-    "Model!J21"
+    "Model!D7",
+    "Model!D7",
+    "Model!D7",
+    "Model!E7",
+    "Model!F7",
+    "Model!G7",
+    "Model!H7",
+    "Model!D11"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 6
+   "total_findings": 14
   },
   {
    "mutant": "clean-07-missing_sheet-1",
    "kind": "R007",
-   "target": "Model!G11",
+   "target": "Model!E11",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!G11",
-    "Model!G11",
-    "Model!G11",
-    "Model!H11",
-    "Model!I11",
-    "Model!J11",
-    "Model!K11",
-    "Model!L11"
+    "Model!E11",
+    "Model!E11",
+    "Model!E11",
+    "Model!C13",
+    "Model!E11"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 28
+   "total_findings": 5
   },
   {
    "mutant": "clean-07-circular-0",
    "kind": "R006",
-   "target": "Model!C28",
+   "target": "Model!C16",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C28"
+    "Model!C16"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
@@ -1503,53 +1882,117 @@
   {
    "mutant": "clean-07-circular-1",
    "kind": "R006",
-   "target": "Model!C28",
+   "target": "Model!C16",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C28"
+    "Model!C16"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
    "total_findings": 1
   },
   {
-   "mutant": "clean-08-shrink_sum-0",
-   "kind": "R001",
-   "target": "Model!L17",
+   "mutant": "clean-07-external_link-0",
+   "kind": "R014",
+   "target": "Model!E6",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!L17",
-    "Model!L17"
+    "Model!E6",
+    "Model!E6"
    ],
-   "top_rule": "R002",
-   "rank_of_hit": 2,
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 2
+  },
+  {
+   "mutant": "clean-07-external_link-1",
+   "kind": "R014",
+   "target": "Model!D10",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!D10",
+    "Model!D10"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 2
+  },
+  {
+   "mutant": "clean-07-hidden_row-0",
+   "kind": "R015",
+   "target": "Model!E11",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!H11",
+    "Model!G11",
+    "Model!F11",
+    "Model!E11",
+    "Model!D11",
+    "Model!C11"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 6
+  },
+  {
+   "mutant": "clean-07-hidden_row-1",
+   "kind": "R015",
+   "target": "Model!H11",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!H11",
+    "Model!G11",
+    "Model!F11",
+    "Model!E11",
+    "Model!D11",
+    "Model!C11"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 6
+  },
+  {
+   "mutant": "clean-08-shrink_sum-0",
+   "kind": "R001",
+   "target": "Model!E10",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!E10",
+    "Model!E10"
+   ],
+   "top_rule": "R001",
+   "rank_of_hit": 1,
    "total_findings": 2
   },
   {
    "mutant": "clean-08-shrink_sum-1",
    "kind": "R001",
-   "target": "Model!J17",
+   "target": "Model!E10",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!J17",
-    "Model!J17"
+    "Model!E10",
+    "Model!E10"
    ],
-   "top_rule": "R002",
-   "rank_of_hit": 2,
+   "top_rule": "R001",
+   "rank_of_hit": 1,
    "total_findings": 2
   },
   {
    "mutant": "clean-08-break_pattern-0",
    "kind": "R002",
-   "target": "Model!I19",
+   "target": "Model!F10",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!I19",
-    "Model!I19"
+    "Model!F10",
+    "Model!F10"
    ],
    "top_rule": "R002",
    "rank_of_hit": 1,
@@ -1558,12 +2001,12 @@
   {
    "mutant": "clean-08-break_pattern-1",
    "kind": "R002",
-   "target": "Model!I19",
+   "target": "Model!F10",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!I19",
-    "Model!I19"
+    "Model!F10",
+    "Model!F10"
    ],
    "top_rule": "R002",
    "rank_of_hit": 1,
@@ -1572,11 +2015,11 @@
   {
    "mutant": "clean-08-number_as_text-0",
    "kind": "R008",
-   "target": "Model!C17",
+   "target": "Model!C10",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C17"
+    "Model!C10"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -1585,11 +2028,11 @@
   {
    "mutant": "clean-08-number_as_text-1",
    "kind": "R008",
-   "target": "Model!C17",
+   "target": "Model!C10",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C17"
+    "Model!C10"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -1626,51 +2069,51 @@
   {
    "mutant": "clean-08-missing_sheet-0",
    "kind": "R007",
-   "target": "Model!E15",
+   "target": "Model!E7",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!E15",
-    "Model!E15",
-    "Model!E15",
-    "Model!F15",
-    "Model!G15",
-    "Model!H15",
-    "Model!I15",
-    "Model!J15"
+    "Model!E7",
+    "Model!E7",
+    "Model!E7",
+    "Model!F7",
+    "Model!G7",
+    "Model!H7",
+    "Model!E10",
+    "Model!F10"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 34
+   "total_findings": 12
   },
   {
    "mutant": "clean-08-missing_sheet-1",
    "kind": "R007",
-   "target": "Model!D8",
+   "target": "Model!E9",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!D8",
-    "Model!D8",
-    "Model!D8",
-    "Model!E8",
-    "Model!F8",
-    "Model!G8",
-    "Model!H8",
-    "Model!I8"
+    "Model!E9",
+    "Model!E9",
+    "Model!E9",
+    "Model!F9",
+    "Model!G9",
+    "Model!H9",
+    "Model!E10",
+    "Model!F10"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 37
+   "total_findings": 12
   },
   {
    "mutant": "clean-08-circular-0",
    "kind": "R006",
-   "target": "Model!C31",
+   "target": "Model!C22",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C31"
+    "Model!C22"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
@@ -1679,53 +2122,117 @@
   {
    "mutant": "clean-08-circular-1",
    "kind": "R006",
-   "target": "Model!C31",
+   "target": "Model!C22",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C31"
+    "Model!C22"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
    "total_findings": 1
   },
   {
-   "mutant": "clean-09-shrink_sum-0",
-   "kind": "R001",
-   "target": "Model!H9",
+   "mutant": "clean-08-external_link-0",
+   "kind": "R014",
+   "target": "Model!H8",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!H9",
-    "Model!H9"
+    "Model!H8",
+    "Model!H8"
    ],
-   "top_rule": "R001",
+   "top_rule": "R014",
    "rank_of_hit": 1,
+   "total_findings": 2
+  },
+  {
+   "mutant": "clean-08-external_link-1",
+   "kind": "R014",
+   "target": "Model!G6",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!G6",
+    "Model!G6"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 2
+  },
+  {
+   "mutant": "clean-08-hidden_row-0",
+   "kind": "R015",
+   "target": "Model!F10",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!H10",
+    "Model!G10",
+    "Model!F10",
+    "Model!E10",
+    "Model!D10",
+    "Model!C10"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 6
+  },
+  {
+   "mutant": "clean-08-hidden_row-1",
+   "kind": "R015",
+   "target": "Model!F10",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!H10",
+    "Model!G10",
+    "Model!F10",
+    "Model!E10",
+    "Model!D10",
+    "Model!C10"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 6
+  },
+  {
+   "mutant": "clean-09-shrink_sum-0",
+   "kind": "R001",
+   "target": "Model!L20",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!L20",
+    "Model!L20"
+   ],
+   "top_rule": "R002",
+   "rank_of_hit": 2,
    "total_findings": 2
   },
   {
    "mutant": "clean-09-shrink_sum-1",
    "kind": "R001",
-   "target": "Model!F16",
+   "target": "Model!J20",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!F16",
-    "Model!F16"
+    "Model!J20",
+    "Model!J20"
    ],
-   "top_rule": "R001",
-   "rank_of_hit": 1,
+   "top_rule": "R002",
+   "rank_of_hit": 2,
    "total_findings": 2
   },
   {
    "mutant": "clean-09-break_pattern-0",
    "kind": "R002",
-   "target": "Model!F9",
+   "target": "Model!I6",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!F9",
-    "Model!F9"
+    "Model!I6",
+    "Model!I6"
    ],
    "top_rule": "R002",
    "rank_of_hit": 1,
@@ -1734,12 +2241,12 @@
   {
    "mutant": "clean-09-break_pattern-1",
    "kind": "R002",
-   "target": "Model!F22",
+   "target": "Model!I19",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!F22",
-    "Model!F22"
+    "Model!I19",
+    "Model!I19"
    ],
    "top_rule": "R002",
    "rank_of_hit": 1,
@@ -1748,11 +2255,11 @@
   {
    "mutant": "clean-09-number_as_text-0",
    "kind": "R008",
-   "target": "Model!C9",
+   "target": "Model!C11",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C9"
+    "Model!C11"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -1761,11 +2268,11 @@
   {
    "mutant": "clean-09-number_as_text-1",
    "kind": "R008",
-   "target": "Model!C9",
+   "target": "Model!C11",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C9"
+    "Model!C11"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -1802,51 +2309,51 @@
   {
    "mutant": "clean-09-missing_sheet-0",
    "kind": "R007",
-   "target": "Model!E9",
+   "target": "Model!L19",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!E9",
-    "Model!E9",
-    "Model!E9",
-    "Model!E24",
-    "Model!C26",
-    "Model!C27",
-    "Model!C28",
-    "Model!E9"
+    "Model!L19",
+    "Model!L19",
+    "Model!L19",
+    "Model!M19",
+    "Model!N19",
+    "Model!L20",
+    "Model!M20",
+    "Model!N20"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 8
+   "total_findings": 16
   },
   {
    "mutant": "clean-09-missing_sheet-1",
    "kind": "R007",
-   "target": "Model!F8",
+   "target": "Model!K6",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!F8",
-    "Model!F8",
-    "Model!F8",
-    "Model!G8",
-    "Model!H8",
-    "Model!F9",
-    "Model!G9",
-    "Model!H9"
+    "Model!K6",
+    "Model!K6",
+    "Model!K6",
+    "Model!L6",
+    "Model!M6",
+    "Model!N6",
+    "Model!K11",
+    "Model!L11"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 15
+   "total_findings": 20
   },
   {
    "mutant": "clean-09-circular-0",
    "kind": "R006",
-   "target": "Model!C31",
+   "target": "Model!C28",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C31"
+    "Model!C28"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
@@ -1855,29 +2362,96 @@
   {
    "mutant": "clean-09-circular-1",
    "kind": "R006",
-   "target": "Model!C31",
+   "target": "Model!C28",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C31"
+    "Model!C28"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
    "total_findings": 1
   },
   {
-   "mutant": "clean-10-shrink_sum-0",
-   "kind": "R001",
-   "target": "Model!D9",
+   "mutant": "clean-09-external_link-0",
+   "kind": "R014",
+   "target": "Model!L9",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!D9",
-    "Model!D9"
+    "Model!L9",
+    "Model!L9"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 2
+  },
+  {
+   "mutant": "clean-09-external_link-1",
+   "kind": "R014",
+   "target": "Model!E17",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!E17",
+    "Model!E17"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 2
+  },
+  {
+   "mutant": "clean-09-hidden_row-0",
+   "kind": "R015",
+   "target": "Model!H11",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!N11",
+    "Model!M11",
+    "Model!L11",
+    "Model!K11",
+    "Model!J11",
+    "Model!I11",
+    "Model!H11",
+    "Model!G11"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 12
+  },
+  {
+   "mutant": "clean-09-hidden_row-1",
+   "kind": "R015",
+   "target": "Model!D20",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!N20",
+    "Model!M20",
+    "Model!L20",
+    "Model!K20",
+    "Model!J20",
+    "Model!I20",
+    "Model!H20",
+    "Model!G20"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 12
+  },
+  {
+   "mutant": "clean-10-shrink_sum-0",
+   "kind": "R001",
+   "target": "Model!C15",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!C15"
    ],
    "top_rule": "R001",
    "rank_of_hit": 1,
-   "total_findings": 2
+   "total_findings": 1
   },
   {
    "mutant": "clean-10-shrink_sum-1",
@@ -1886,40 +2460,11 @@
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!D9",
     "Model!D9"
    ],
    "top_rule": "R001",
    "rank_of_hit": 1,
-   "total_findings": 2
-  },
-  {
-   "mutant": "clean-10-break_pattern-0",
-   "kind": "R002",
-   "target": "Model!F9",
-   "detected": true,
-   "detected_by_right_rule": true,
-   "reported_cells": [
-    "Model!F9",
-    "Model!F9"
-   ],
-   "top_rule": "R002",
-   "rank_of_hit": 1,
-   "total_findings": 2
-  },
-  {
-   "mutant": "clean-10-break_pattern-1",
-   "kind": "R002",
-   "target": "Model!F9",
-   "detected": true,
-   "detected_by_right_rule": true,
-   "reported_cells": [
-    "Model!F9",
-    "Model!F9"
-   ],
-   "top_rule": "R002",
-   "rank_of_hit": 1,
-   "total_findings": 2
+   "total_findings": 1
   },
   {
    "mutant": "clean-10-number_as_text-0",
@@ -1954,12 +2499,11 @@
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!D6",
     "Model!D6"
    ],
    "top_rule": "R012",
    "rank_of_hit": 1,
-   "total_findings": 2
+   "total_findings": 1
   },
   {
    "mutant": "clean-10-masked_error-1",
@@ -1968,61 +2512,58 @@
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!D6",
     "Model!D6"
    ],
    "top_rule": "R012",
    "rank_of_hit": 1,
-   "total_findings": 2
+   "total_findings": 1
   },
   {
    "mutant": "clean-10-missing_sheet-0",
    "kind": "R007",
-   "target": "Model!H6",
+   "target": "Model!E13",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!H6",
-    "Model!H6",
-    "Model!H6",
-    "Model!H9",
-    "Model!C18",
-    "Model!C19",
-    "Model!C20",
-    "Model!H6"
+    "Model!E13",
+    "Model!E13",
+    "Model!E15",
+    "Model!E23",
+    "Model!C26",
+    "Model!E24",
+    "Model!E13"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 8
+   "total_findings": 7
   },
   {
    "mutant": "clean-10-missing_sheet-1",
    "kind": "R007",
-   "target": "Model!H7",
+   "target": "Model!E14",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!H7",
-    "Model!H7",
-    "Model!H7",
-    "Model!H9",
-    "Model!C18",
-    "Model!C19",
-    "Model!C20",
-    "Model!H7"
+    "Model!E14",
+    "Model!E14",
+    "Model!E15",
+    "Model!E23",
+    "Model!C26",
+    "Model!E24",
+    "Model!E14"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 8
+   "total_findings": 7
   },
   {
    "mutant": "clean-10-circular-0",
    "kind": "R006",
-   "target": "Model!C23",
+   "target": "Model!C29",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C23"
+    "Model!C29"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
@@ -2031,24 +2572,80 @@
   {
    "mutant": "clean-10-circular-1",
    "kind": "R006",
-   "target": "Model!C23",
+   "target": "Model!C29",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C23"
+    "Model!C29"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
    "total_findings": 1
   },
   {
-   "mutant": "clean-11-shrink_sum-0",
-   "kind": "R001",
-   "target": "Model!C11",
+   "mutant": "clean-10-external_link-0",
+   "kind": "R014",
+   "target": "Model!E12",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C11"
+    "Model!E12"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 1
+  },
+  {
+   "mutant": "clean-10-external_link-1",
+   "kind": "R014",
+   "target": "Model!C15",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!C15"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 1
+  },
+  {
+   "mutant": "clean-10-hidden_row-0",
+   "kind": "R015",
+   "target": "Model!E21",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!E21",
+    "Model!D21",
+    "Model!C21"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 3
+  },
+  {
+   "mutant": "clean-10-hidden_row-1",
+   "kind": "R015",
+   "target": "Model!D21",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!E21",
+    "Model!D21",
+    "Model!C21"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 3
+  },
+  {
+   "mutant": "clean-11-shrink_sum-0",
+   "kind": "R001",
+   "target": "Model!D18",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!D18"
    ],
    "top_rule": "R001",
    "rank_of_hit": 1,
@@ -2057,11 +2654,11 @@
   {
    "mutant": "clean-11-shrink_sum-1",
    "kind": "R001",
-   "target": "Model!D11",
+   "target": "Model!C26",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!D11"
+    "Model!C26"
    ],
    "top_rule": "R001",
    "rank_of_hit": 1,
@@ -2070,11 +2667,11 @@
   {
    "mutant": "clean-11-number_as_text-0",
    "kind": "R008",
-   "target": "Model!C26",
+   "target": "Model!C18",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C26"
+    "Model!C18"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -2083,11 +2680,11 @@
   {
    "mutant": "clean-11-number_as_text-1",
    "kind": "R008",
-   "target": "Model!C11",
+   "target": "Model!C26",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C11"
+    "Model!C26"
    ],
    "top_rule": "R008",
    "rank_of_hit": 1,
@@ -2122,46 +2719,50 @@
   {
    "mutant": "clean-11-missing_sheet-0",
    "kind": "R007",
-   "target": "Model!C29",
+   "target": "Model!E14",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C29",
-    "Model!C29",
-    "Model!C29"
+    "Model!E14",
+    "Model!E14",
+    "Model!E18",
+    "Model!E28",
+    "Model!C37",
+    "Model!C38",
+    "Model!C39",
+    "Model!E14"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 3
+   "total_findings": 8
   },
   {
    "mutant": "clean-11-missing_sheet-1",
    "kind": "R007",
-   "target": "Model!E15",
+   "target": "Model!D10",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!E15",
-    "Model!E15",
-    "Model!E18",
-    "Model!E28",
-    "Model!C31",
-    "Model!C32",
-    "Model!C33",
-    "Model!E29"
+    "Model!D10",
+    "Model!D10",
+    "Model!D28",
+    "Model!C37",
+    "Model!C38",
+    "Model!C39",
+    "Model!D10"
    ],
    "top_rule": "R005",
    "rank_of_hit": 2,
-   "total_findings": 9
+   "total_findings": 7
   },
   {
    "mutant": "clean-11-circular-0",
    "kind": "R006",
-   "target": "Model!C36",
+   "target": "Model!C42",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C36"
+    "Model!C42"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
@@ -2170,15 +2771,71 @@
   {
    "mutant": "clean-11-circular-1",
    "kind": "R006",
-   "target": "Model!C36",
+   "target": "Model!C42",
    "detected": true,
    "detected_by_right_rule": true,
    "reported_cells": [
-    "Model!C36"
+    "Model!C42"
    ],
    "top_rule": "R006",
    "rank_of_hit": 1,
    "total_findings": 1
+  },
+  {
+   "mutant": "clean-11-external_link-0",
+   "kind": "R014",
+   "target": "Model!D23",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!D23"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 1
+  },
+  {
+   "mutant": "clean-11-external_link-1",
+   "kind": "R014",
+   "target": "Model!C38",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!C38"
+   ],
+   "top_rule": "R014",
+   "rank_of_hit": 1,
+   "total_findings": 1
+  },
+  {
+   "mutant": "clean-11-hidden_row-0",
+   "kind": "R015",
+   "target": "Model!D26",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!E26",
+    "Model!D26",
+    "Model!C26"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 3
+  },
+  {
+   "mutant": "clean-11-hidden_row-1",
+   "kind": "R015",
+   "target": "Model!E18",
+   "detected": true,
+   "detected_by_right_rule": true,
+   "reported_cells": [
+    "Model!C18",
+    "Model!D18",
+    "Model!E18"
+   ],
+   "top_rule": "R015",
+   "rank_of_hit": 1,
+   "total_findings": 3
   }
  ]
 }

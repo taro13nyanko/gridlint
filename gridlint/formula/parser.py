@@ -8,7 +8,8 @@ from __future__ import annotations
 
 import re
 
-from .ast_nodes import BinOp, ErrorLit, FuncCall, Literal, Name, Node, PostfixOp, RangeRef, Ref, UnaryOp
+from .ast_nodes import (BinOp, ErrorLit, ExternalRef, FuncCall, Literal, Name, Node,
+                        PostfixOp, RangeRef, Ref, TableRef, UnaryOp)
 from .tokenizer import FormulaSyntaxError, Token, TokType, tokenize
 
 # binary operator precedence (higher binds tighter)
@@ -69,6 +70,21 @@ def parse_range(raw: str) -> RangeRef:
     r2 = parse_ref(f"{sheet}!{b}" if sheet else b)
     return RangeRef(sheet, min(r1.col, r2.col), min(r1.row, r2.row),
                     max(r1.col, r2.col), max(r1.row, r2.row), raw)
+
+
+_TABLE_PARTS = re.compile(r"^([A-Za-z_][A-Za-z0-9_.]*)\[(.*)\]$", re.S)
+#: Special items inside a structured reference that are not column names.
+_TABLE_ITEMS = {"#DATA", "#ALL", "#HEADERS", "#TOTALS", "#THIS ROW"}
+
+
+def parse_table_ref(raw: str) -> TableRef:
+    m = _TABLE_PARTS.match(raw)
+    if not m:
+        raise FormulaSyntaxError(f"bad table reference {raw!r}")
+    table, inner = m.group(1), m.group(2).strip()
+    parts = [p.strip().strip("[]") for p in re.split(r"\],\s*\[|,", inner) if p.strip()]
+    columns = [p for p in parts if p.upper() not in _TABLE_ITEMS]
+    return TableRef(table=table, column=columns[0] if columns else None, raw=raw)
 
 
 class Parser:
@@ -147,6 +163,10 @@ class Parser:
             return parse_range(t.value)
         if t.type is TokType.NAME:
             return Name(t.value)
+        if t.type is TokType.TABLE:
+            return parse_table_ref(t.value)
+        if t.type is TokType.EXTERNAL:
+            return ExternalRef(t.value)
         if t.type is TokType.LPAREN:
             inner = self.parse_expr(0)
             self.expect(TokType.RPAREN)

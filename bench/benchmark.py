@@ -155,6 +155,33 @@ def mut_missing_sheet(ws, rng: random.Random):
     return cell.coordinate, "reference to a sheet that does not exist"
 
 
+def mut_external_link(ws, rng: random.Random):
+    """A reference into a workbook nobody has any more."""
+    cands = list(_formula_cells(ws))
+    if not cands:
+        return None
+    cell = rng.choice(cands)
+    cell.value = "=[1]Budget!B7*1"
+    return cell.coordinate, "reference into a workbook that is not attached"
+
+
+def mut_hidden_row(ws, rng: random.Random):
+    """A row hidden inside a range that is still being totalled."""
+    import re
+
+    cands = []
+    for c in _formula_cells(ws):
+        m = re.match(r"^=SUM\(([A-Z]{1,3})(\d+):([A-Z]{1,3})(\d+)\)$", c.value or "")
+        if m and int(m.group(4)) - int(m.group(2)) >= 2:
+            cands.append((c, int(m.group(2)), int(m.group(4))))
+    if not cands:
+        return None
+    cell, r1, r2 = rng.choice(cands)
+    hide = rng.randint(r1 + 1, r2 - 1)
+    ws.row_dimensions[hide].hidden = True
+    return cell.coordinate, f"row {hide} hidden inside the summed range"
+
+
 def mut_circular(ws, rng: random.Random):
     """Two cells that depend on each other."""
     r = ws.max_row + 3
@@ -170,6 +197,8 @@ MUTATIONS = [
     ("R012", "masked_error", mut_masked_error),
     ("R007", "missing_sheet", mut_missing_sheet),
     ("R006", "circular", mut_circular),
+    ("R014", "external_link", mut_external_link),
+    ("R015", "hidden_row", mut_hidden_row),
 ]
 
 

@@ -13,7 +13,7 @@ from ..formula.evaluator import CIRC
 from ..formula.functions import VOLATILE
 from ..formula.values import BLANK, ExcelError
 from ..workbook import Workbook
-from .base import CRITICAL, INFO, WARNING, Finding, addr, is_currency_format, rule
+from .base import CRITICAL, INFO, WARNING, Finding, Fix, addr, is_currency_format, rule
 
 ERROR_MEANING = {
     "#DIV/0!": "something is divided by zero or by an empty cell",
@@ -39,6 +39,8 @@ def error_values(wb: Workbook, computed: dict, graph, **_: Any) -> Iterable[Find
             continue
         if err.code == CIRC:
             continue                                  # reported by R006 instead
+        if cell.uses_external or _reads_external(wb, graph, computed, key):
+            continue                                  # reported by R014, which says why
         root = _root_cause(wb, computed, graph, key)
         is_root = root == key
         downstream = graph.downstream([key])
@@ -56,6 +58,23 @@ def error_values(wb: Workbook, computed: dict, graph, **_: Any) -> Iterable[Find
             impact_cells=len(downstream),
             confidence=1.0,
         )
+
+
+def _reads_external(wb: Workbook, graph, computed: dict, key) -> bool:
+    """True when this cell's error is inherited from a link to another workbook."""
+    seen, stack = set(), [key]
+    while stack:
+        k = stack.pop()
+        if k in seen:
+            continue
+        seen.add(k)
+        c = wb.get(*k)
+        if c is not None and c.uses_external:
+            return True
+        for p in graph.precedents.get(k, None).cells if graph.precedents.get(k) else ():
+            if isinstance(computed.get(p), ExcelError):
+                stack.append(p)
+    return False
 
 
 def _root_cause(wb: Workbook, computed: dict, graph, key) -> Any:
@@ -232,6 +251,111 @@ def iferror_masking(wb: Workbook, computed: dict, graph, **_: Any) -> Iterable[F
                 confidence=0.95,
             )
             break
+
+
+@rule("R014", "The number comes from a workbook you do not have",
+      "A link to another file shows whatever that file held the last time somebody opened both.",
+      CRITICAL)
+def external_links(wb: Workbook, computed: dict, graph, **_: Any) -> Iterable[Finding]:
+    from ..formula.ast_nodes import ExternalRef
+
+    by_target: dict[str, list] = {}
+    for cell in wb.formula_cells():
+        if cell.ast is None or not cell.uses_external:
+            continue
+        for node in walk(cell.ast):
+            if isinstance(node, ExternalRef):
+                book = node.raw.split("]")[0].lstrip("[")
+                book = f"another workbook (link {book})" if book.isdigit() else book
+                by_target.setdefault(book, []).append((cell, node.raw))
+
+    for book, entries in sorted(by_target.items()):
+        cell, raw = entries[0]
+        others = len(entries) - 1
+        downstream = graph.downstream([(c.sheet, c.col, c.row) for c, _r in entries])
+        yield Finding(
+            rule="R014",
+            title=("Reads a workbook that is not part of this file"
+                   if book.startswith("another workbook") else f"Reads a workbook that is not here: {book}"),
+            severity=CRITICAL,
+            cell=cell.ref, sheet=cell.sheet, col=cell.col, row=cell.row,
+            formula=cell.formula,
+            detail=(f"{raw} points into {book}, which is not part of this file. "
+                    f"The number shown is a snapshot from the last time somebody had both files "
+                    f"open{f', and {others} other formula(s) do the same' if others else ''}. "
+                    "Nothing here can check whether it is still right."),
+            evidence={"workbook": book, "reference": raw,
+                      "formulas": [c.ref for c, _r in entries[:10]], "count": len(entries),
+                      "affected_cells": len(downstream)},
+            related=[c.ref for c, _r in entries[1:6]],
+            impact_cells=len(downstream),
+            group_size=len(entries),
+            group_cells=[c.ref for c, _r in entries[:24]],
+            confidence=1.0,
+        )
+
+
+@rule("R015", "A hidden row or column sits inside a total",
+      "A total that spans hidden rows still adds them, and nobody reading the sheet can see why it is high.",
+      WARNING)
+def hidden_rows_in_range(wb: Workbook, computed: dict, graph, **_: Any) -> Iterable[Finding]:
+    from ..formula.ast_nodes import FuncCall, RangeRef
+    from ..rules.structural import BLOCK_AGGREGATES
+
+    seen: set[str] = set()
+    for cell in wb.formula_cells():
+        if cell.ast is None:
+            continue
+        for node in walk(cell.ast):
+            if not isinstance(node, FuncCall) or node.name not in BLOCK_AGGREGATES:
+                continue
+            for arg in node.args:
+                if not isinstance(arg, RangeRef):
+                    continue
+                sheet_name = arg.sheet or cell.sheet
+                sheet = wb.sheets.get(sheet_name)
+                if sheet is None or not sheet.hidden_rows:
+                    continue
+                hidden = sorted(r for r in sheet.hidden_rows if arg.row1 <= r <= arg.row2)
+                hidden = [r for r in hidden if wb.get(sheet_name, arg.col1, r) is not None]
+                if not hidden:
+                    continue
+                key = f"{cell.ref}:{arg.raw}"
+                if key in seen:
+                    continue
+                seen.add(key)
+                total = sum(_number(_value_at(wb, computed, sheet_name, arg.col1, r)) for r in hidden)
+                yield Finding(
+                    rule="R015",
+                    title=f"{len(hidden)} hidden row(s) inside {arg.raw}",
+                    severity=WARNING,
+                    cell=cell.ref, sheet=cell.sheet, col=cell.col, row=cell.row,
+                    formula=cell.formula,
+                    detail=(f"Row{'s' if len(hidden) > 1 else ''} "
+                            f"{', '.join(str(r) for r in hidden[:5])} "
+                            f"{'are' if len(hidden) > 1 else 'is'} hidden but still counted by this "
+                            f"{node.name}, contributing about {total:,.0f}. Someone reading the sheet "
+                            "cannot see where that part of the total comes from."),
+                    evidence={"range": arg.raw, "hidden_rows": hidden[:20],
+                              "hidden_contribution": total},
+                    impact_value=abs(total) or None,
+                    impact_currency=is_currency_format(cell.number_format),
+                    confidence=0.8,
+                )
+
+
+def _value_at(wb: Workbook, computed: dict, sheet: str, col: int, row: int) -> Any:
+    key = (sheet, col, row)
+    if key in computed:
+        return computed[key]
+    c = wb.get(sheet, col, row)
+    if c is None:
+        return None
+    return c.static if c.static is not None else c.cached
+
+
+def _number(v: Any) -> float:
+    return float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else 0.0
 
 
 def _plain(v: Any) -> Any:

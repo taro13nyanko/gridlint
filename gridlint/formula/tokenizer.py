@@ -19,6 +19,8 @@ class TokType(str, Enum):
     RANGE = "range"      # A1:B9, Sheet1!A1:B9
     NAME = "name"        # defined name or function name (followed by "(")
     FUNC = "func"        # NAME immediately followed by "("
+    TABLE = "table"      # Table1[Amount], Sales[[#Data],[Amount]]
+    EXTERNAL = "external"  # [1]Sheet1!A1, [Budget.xlsx]Sheet1!A1
     OP = "op"
     LPAREN = "("
     RPAREN = ")"
@@ -49,6 +51,27 @@ _A1_RE = re.compile(r"\$?([A-Za-z]{1,3})\$?([1-9]\d{0,6})(?![A-Za-z0-9_])")
 _COL_RANGE_RE = re.compile(r"\$?([A-Za-z]{1,3}):\$?([A-Za-z]{1,3})(?![A-Za-z0-9_])")
 _ROW_RANGE_RE = re.compile(r"\$?([1-9]\d{0,6}):\$?([1-9]\d{0,6})(?![A-Za-z0-9_])")
 _NAME_RE = re.compile(r"[A-Za-z_\\][A-Za-z0-9_.\\]*")
+# Structured table reference: Table1[Amount], Sales[[#Data],[Amount]], Table1[[a]:[b]]
+_TABLE_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_.]*\[(?:[^\[\]]|\[[^\[\]]*\])*\]")
+# A reference into another workbook: [1]Sheet!A1 or [Budget.xlsx]Sheet!A1.
+# The quoted form '[Book 1.xlsx]Sheet'!A1 is picked up by _SHEET_RE instead.
+_EXTERNAL_RE = re.compile(
+    r"\[[^\[\]]+\](?:'[^']+'|[A-Za-z_][A-Za-z0-9_. ]*)!"
+    r"\$?[A-Za-z]{1,3}\$?[0-9]+(?::\$?[A-Za-z]{1,3}\$?[0-9]+)?"
+)
+
+
+#: Excel writes functions added after 2007 with a marker prefix in the stored
+#: XML, so a file using MAXIFS holds "_xlfn.MAXIFS". Anything reading the file
+#: rather than the screen has to strip it.
+_FUTURE_PREFIXES = ("_XLFN.", "_XLWS.", "_XLL.")
+
+
+def _strip_future_prefix(name: str) -> str:
+    for prefix in _FUTURE_PREFIXES:
+        if name.startswith(prefix):
+            return _strip_future_prefix(name[len(prefix):])
+    return name
 
 
 def tokenize(formula: str) -> list[Token]:
@@ -98,6 +121,24 @@ def tokenize(formula: str) -> list[Token]:
         if ch == "{":
             raise FormulaSyntaxError("array literals are not supported")
 
+        # External workbook reference: [1]Sheet!A1 or [Budget.xlsx]Sheet!A1.
+        # The value in the file is a snapshot of a workbook we do not have, so
+        # this is tokenized rather than rejected: R014 reports it as a defect.
+        # Guarded on the opening bracket: attempting this pattern at every
+        # position cost more than the rest of the tokenizer put together.
+        if ch == "[":
+            m_ext = _EXTERNAL_RE.match(s, i)
+            if m_ext:
+                out.append(Token(TokType.EXTERNAL, m_ext.group(0), i))
+                i = m_ext.end()
+                continue
+            raise FormulaSyntaxError(f"unexpected '[' at {i}")
+        if ch == "@":
+            # Implicit intersection marker written by newer Excel. It does not
+            # change the value of a scalar formula, so it is dropped.
+            i += 1
+            continue
+
         # sheet-qualified reference
         m_sheet = _SHEET_RE.match(s, i)
         prefix, after = "", i
@@ -141,9 +182,17 @@ def tokenize(formula: str) -> list[Token]:
             while k < n and s[k] in " \t":
                 k += 1
             if k < n and s[k] == "(":
-                out.append(Token(TokType.FUNC, up, i))
+                out.append(Token(TokType.FUNC, _strip_future_prefix(up), i))
                 i = j
                 continue
+            # A name followed by "[" is a structured table reference. Checking
+            # here rather than up front keeps the bracket pattern off the hot path.
+            if j < n and s[j] == "[":
+                m_tbl = _TABLE_RE.match(s, i)
+                if m_tbl:
+                    out.append(Token(TokType.TABLE, m_tbl.group(0), i))
+                    i = m_tbl.end()
+                    continue
             if up in ("TRUE", "FALSE"):
                 out.append(Token(TokType.BOOL, up, i)); i = j; continue
             out.append(Token(TokType.NAME, word, i)); i = j; continue

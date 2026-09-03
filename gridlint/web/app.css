@@ -236,6 +236,19 @@ table.diff td.cell { font-family: var(--mono); color: var(--ink-2); white-space:
 table.diff td.from { color: var(--ink-3); text-decoration: line-through; }
 table.diff td.to { color: var(--danger); font-weight: 600; }
 
+/* The dependency trace: indent by depth so the chain reads top-down. */
+ol.trace { list-style: none; margin: 0 0 8px; padding: 0; font-size: 13px; }
+ol.trace li {
+  display: grid; grid-template-columns: 62px 1fr 1.3fr; gap: 10px; align-items: baseline;
+  padding: 4px 8px 4px calc(8px + var(--d) * 14px);
+  border-left: 2px solid var(--line); border-radius: 0 6px 6px 0;
+}
+ol.trace li.moves { border-left-color: var(--danger); background: var(--danger-wash); }
+ol.trace .t-cell { color: var(--ink-3); }
+ol.trace .t-label { color: var(--ink); font-weight: 550; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+ol.trace .t-formula { color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 620px) { ol.trace li { grid-template-columns: 1fr; gap: 2px; } }
+
 .verified { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 560; color: var(--ok); background: var(--ok-wash); padding: 5px 10px; border-radius: 999px; }
 .unverified { color: var(--warn); background: var(--warn-wash); }
 .detail-actions { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 6px; }

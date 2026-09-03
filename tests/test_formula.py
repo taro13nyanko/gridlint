@@ -188,8 +188,19 @@ def test_reference_to_missing_sheet_is_a_ref_error():
 
 
 def test_unknown_function_is_a_name_error():
-    r = ev("=XLOOKUP(1,A1:A2,B1:B2)")
+    r = ev("=NOTAREALFUNCTION(1,2)")
     assert isinstance(r, ExcelError) and r.code == "#NAME?"
+
+
+def test_functions_excel_knows_but_gridlint_cannot_model_are_reported_not_guessed():
+    """OFFSET and INDIRECT hide which cells they read, so the honest answer is
+    "not modelled", never a number that happens to look plausible."""
+    from gridlint.formula.functions import FUNCTIONS, UNSUPPORTED
+
+    for name in ("OFFSET", "INDIRECT", "LET", "LAMBDA"):
+        assert name in UNSUPPORTED
+        assert name not in FUNCTIONS
+    assert isinstance(ev("=OFFSET(A1,1,1)"), ExcelError)
 
 
 def test_text_functions():

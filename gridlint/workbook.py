@@ -16,7 +16,7 @@ import openpyxl
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.formula import ArrayFormula
 
-from .formula.ast_nodes import Node
+from .formula.ast_nodes import ExternalRef, Node, TableRef, walk
 from .formula.parser import parse_formula
 from .formula.tokenizer import FormulaSyntaxError
 from .formula.values import BLANK, ExcelError
@@ -26,6 +26,33 @@ ERROR_LITERALS = {"#DIV/0!", "#VALUE!", "#REF!", "#NAME?", "#NUM!", "#NULL!", "#
 
 def a1(col: int, row: int) -> str:
     return f"{get_column_letter(col)}{row}"
+
+
+@dataclass
+class TableInfo:
+    """An Excel table, so Table1[Amount] can be resolved to a real range."""
+    name: str
+    sheet: str
+    col1: int
+    row1: int
+    col2: int
+    row2: int
+    columns: list[str] = field(default_factory=list)
+    header_rows: int = 1
+    totals_rows: int = 0
+
+    def column_range(self, column: str | None) -> tuple[int, int, int, int]:
+        """(col1, row1, col2, row2) for one column's data rows, or the whole body."""
+        first_data = self.row1 + self.header_rows
+        last_data = self.row2 - self.totals_rows
+        if column is None:
+            return self.col1, first_data, self.col2, last_data
+        wanted = column.strip().lower()
+        for i, name in enumerate(self.columns):
+            if name.strip().lower() == wanted:
+                c = self.col1 + i
+                return c, first_data, c, last_data
+        raise KeyError(column)
 
 
 @dataclass
@@ -40,6 +67,8 @@ class Cell:
     parse_error: str | None = None
     number_format: str = "General"
     is_array: bool = False
+    uses_external: bool = False       # reads a workbook this file does not contain
+    uses_table: bool = False
 
     @property
     def addr(self) -> str:
@@ -61,6 +90,8 @@ class Sheet:
     max_col: int = 0
     max_row: int = 0
     hidden: bool = False
+    hidden_rows: set[int] = field(default_factory=set)
+    hidden_cols: set[int] = field(default_factory=set)
 
     def cell(self, col: int, row: int) -> Cell | None:
         return self.cells.get((col, row))
@@ -71,6 +102,7 @@ class Workbook:
     path: str
     sheets: dict[str, Sheet] = field(default_factory=dict)
     defined_names: dict[str, str] = field(default_factory=dict)
+    tables: dict[str, TableInfo] = field(default_factory=dict)
     load_warnings: list[str] = field(default_factory=list)
 
     @property
@@ -103,6 +135,8 @@ class Workbook:
             "cells": sum(len(s.cells) for s in self.sheets.values()),
             "formulas": len(formulas),
             "unparsed": sum(1 for c in formulas if c.parse_error),
+            "tables": len(self.tables),
+            "external_links": sum(1 for c in formulas if c.uses_external),
         }
 
 
@@ -137,6 +171,26 @@ def load(path: str | Path) -> Workbook:
 
     for idx, ws in enumerate(wb_f.worksheets):
         sheet = Sheet(name=ws.title, index=idx, hidden=ws.sheet_state != "visible")
+        # openpyxl's TableList.items() yields (name, ref string); the Table
+        # objects with their columns are only reachable through .values().
+        for table in _worksheet_tables(ws):
+            info = _table_info(ws.title, table)
+            if info is not None:
+                out.tables[info.name.lower()] = info
+        for r_index, dim in (ws.row_dimensions or {}).items():
+            if getattr(dim, "hidden", False):
+                sheet.hidden_rows.add(int(r_index))
+        from openpyxl.utils import column_index_from_string
+        for c_key, dim in (ws.column_dimensions or {}).items():
+            if not getattr(dim, "hidden", False):
+                continue
+            try:
+                start = column_index_from_string(getattr(dim, "min", None) and
+                                                 get_column_letter(dim.min) or str(c_key))
+                end = int(getattr(dim, "max", start) or start)
+                sheet.hidden_cols.update(range(int(start), int(end) + 1))
+            except Exception:
+                continue
         vs = wb_v[ws.title]
         for row in ws.iter_rows():
             for c in row:
@@ -153,6 +207,8 @@ def load(path: str | Path) -> Workbook:
                                 is_array=is_array)
                     try:
                         cell.ast = parse_formula(raw)
+                        cell.uses_external = any(isinstance(n, ExternalRef) for n in walk(cell.ast))
+                        cell.uses_table = any(isinstance(n, TableRef) for n in walk(cell.ast))
                     except FormulaSyntaxError as e:
                         cell.parse_error = str(e)
                     except RecursionError:
@@ -170,3 +226,36 @@ def load(path: str | Path) -> Workbook:
     if not out.sheets:
         out.load_warnings.append("workbook contains no worksheets")
     return out
+
+
+def _worksheet_tables(ws: Any) -> list[Any]:
+    tables = getattr(ws, "tables", None)
+    if not tables:
+        return []
+    try:
+        return [t for t in tables.values() if hasattr(t, "ref")]
+    except Exception:                      # pragma: no cover - defensive
+        return []
+
+
+def _table_info(sheet: str, table: Any) -> TableInfo | None:
+    """Read one openpyxl table definition into something the engine can resolve."""
+    ref = getattr(table, "ref", None)
+    if not ref or ":" not in ref:
+        return None
+    try:
+        from .formula.parser import parse_range
+        rng = parse_range(ref)
+    except Exception:
+        return None
+    columns = [str(getattr(c, "name", "")) for c in (getattr(table, "tableColumns", None) or [])]
+    display = str(getattr(table, "displayName", "") or getattr(table, "name", "") or "")
+    if not display:
+        return None
+    return TableInfo(
+        name=display, sheet=sheet,
+        col1=rng.col1, row1=rng.row1, col2=rng.col2, row2=rng.row2,
+        columns=columns,
+        header_rows=int(getattr(table, "headerRowCount", 1) or 0),
+        totals_rows=int(getattr(table, "totalsRowCount", 0) or 0),
+    )

@@ -254,6 +254,16 @@ def _translate(source: Cell, target: Cell) -> str | None:
       "A range that contains a subtotal adds the same numbers twice.",
       CRITICAL)
 def double_counting(wb: Workbook, computed: dict, graph, **_: Any) -> Iterable[Finding]:
+    # Only cells that themselves contain a SUM can be double counted, and there
+    # are few of them. Indexing those once turns a scan of every cell in every
+    # range into a lookup, which is the difference between seconds and
+    # milliseconds on a real model.
+    summing: dict[tuple[str, int], list[Cell]] = defaultdict(list)
+    for c in wb.formula_cells():
+        if c.ast is not None and any(isinstance(n, FuncCall) and n.name in ("SUM", "SUBTOTAL")
+                                     for n in walk(c.ast)):
+            summing[(c.sheet, c.row)].append(c)
+
     for cell in wb.formula_cells():
         if cell.ast is None:
             continue
@@ -264,13 +274,13 @@ def double_counting(wb: Workbook, computed: dict, graph, **_: Any) -> Iterable[F
                 if not isinstance(arg, RangeRef):
                     continue
                 sheet = arg.sheet or cell.sheet
-                for col in range(arg.col1, min(arg.col2, arg.col1 + 200) + 1):
-                    for row in range(arg.row1, min(arg.row2, arg.row1 + 5000) + 1):
-                        inner = wb.get(sheet, col, row)
-                        if inner is None or inner.ast is None or inner is cell:
-                            continue
-                        if (inner.sheet, inner.col, inner.row) == (cell.sheet, cell.col, cell.row):
-                            continue
+                rows = range(arg.row1, min(arg.row2, arg.row1 + 100_000) + 1)
+                for inner in (c for r in rows for c in summing.get((sheet, r), ())):
+                    if not arg.col1 <= inner.col <= arg.col2:
+                        continue
+                    if (inner.sheet, inner.col, inner.row) == (cell.sheet, cell.col, cell.row):
+                        continue
+                    if True:
                         if not _sums_within(inner, arg, sheet):
                             continue
                         yield Finding(

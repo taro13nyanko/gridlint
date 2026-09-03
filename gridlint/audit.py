@@ -229,6 +229,7 @@ def _price(wb: Workbook, graph: engine.Graph, baseline: dict, findings: list[Fin
         f.impact_cells = len(diff)
         f.fix_diff = sorted(diff, key=lambda d: -abs(_num(d["after"]) - _num(d["before"])))[:30]
         f.headline_changes = _headline_changes(wb, graph, diff)
+        f.trace = _trace_for(wb, graph, baseline, f, diff)
         f.fix_verified = _fix_is_sane(f, baseline, after)
         if biggest_cell is not None:
             f.impact_value = abs(after_v - before_v)
@@ -236,6 +237,26 @@ def _price(wb: Workbook, graph: engine.Graph, baseline: dict, findings: list[Fin
             f.impact_before = before_v
             f.impact_after = after_v
             f.impact_currency = any(d["currency"] for d in f.fix_diff)
+
+
+def _trace_for(wb: Workbook, graph: engine.Graph, baseline: dict, f: Finding,
+               diff: list[dict]) -> list[dict]:
+    """Where the headline number comes from, so a reviewer can follow it back.
+
+    The walk starts at the summary line a person reads -- runway, margin -- not
+    at the cell holding the defect, because that is the number they are asking
+    about.
+    """
+    if not f.headline_changes:
+        return []
+    start = _key(f.headline_changes[0]["cell"])
+    if start is None:
+        return []
+    changed = {k for k in (_key(d["cell"]) for d in diff) if k is not None}
+    steps = engine.trace(wb, graph, baseline, start, changed=changed)
+    return [{"cell": s.cell, "label": s.label, "formula": s.formula, "value": s.value,
+             "depth": s.depth, "is_input": s.is_input, "changed": s.changed}
+            for s in steps]
 
 
 def _headline_changes(wb: Workbook, graph: engine.Graph, diff: list[dict]) -> list[dict]:

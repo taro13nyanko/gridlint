@@ -1,0 +1,17 @@
+{
+ "rows": 2000,
+ "cols": 12,
+ "formulas": 22973,
+ "cells": 29069,
+ "file_kb": 150,
+ "ms": {
+  "load_and_parse": 3395,
+  "build_graph": 741,
+  "recalculate": 261,
+  "run_rules": 2524,
+  "full_audit_including_pricing": 7323
+ },
+ "formulas_per_second": 87863,
+ "findings": 0,
+ "graph_edges": 68972
+}

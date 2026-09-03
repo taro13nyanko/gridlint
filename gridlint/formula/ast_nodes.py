@@ -47,6 +47,24 @@ class RangeRef(Node):
 
 
 @dataclass(frozen=True)
+class TableRef(Node):
+    """A structured reference such as Table1[Amount]."""
+    table: str
+    column: str | None
+    raw: str = ""
+
+
+@dataclass(frozen=True)
+class ExternalRef(Node):
+    """A reference into a workbook this file does not contain.
+
+    Its value is whatever that other workbook held the last time somebody with
+    both files open pressed save, which is why R014 reports it.
+    """
+    raw: str
+
+
+@dataclass(frozen=True)
 class Name(Node):
     name: str
 

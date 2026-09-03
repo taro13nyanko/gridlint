@@ -143,6 +143,15 @@ def build_one(app, path: Path, rng: random.Random) -> dict:
         ws.Cells(r, 1).Value = "Months of cash"
         ws.Cells(r, 3).Formula = f"=ROUND(Assumptions!B3/AVERAGE(C{grand}:{col(last)}{grand}),1)"
 
+    # A hidden helper column that is NOT inside any total: hiding something is
+    # not a defect, and R015 must stay quiet about it.
+    if rng.random() < 0.4:
+        helper = last + 2
+        ws.Cells(3, helper).Value = "helper"
+        for r_ in range(4, 8):
+            ws.Cells(r_, helper).Value = r_
+        ws.Columns(f"{col(helper)}:{col(helper)}").Hidden = True
+
     ws.Columns("A:A").ColumnWidth = 28
     app.Calculate()
     if path.exists():

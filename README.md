@@ -80,7 +80,7 @@ the honest division of labour inside Gridlint:
 |---|---|
 | Parse formulas, build the dependency graph | **Code** (`gridlint/formula/`, `gridlint/engine.py`) |
 | Recalculate the workbook | **Code** — a from-scratch Excel evaluation engine |
-| Decide whether something is a defect | **Code** — 13 deterministic rules |
+| Decide whether something is a defect | **Code** — 15 deterministic rules |
 | Measure what a fix changes | **Code** — recalculate and diff |
 | Explain the defect to a non-expert | **A language model**, fenced (below) |
 | Draft a repair where no mechanical fix exists | **A language model**, then compiled and executed before it is offered |
@@ -104,12 +104,12 @@ impact. The model makes the report readable; it does not make it true.
 
 ## Proof
 
-Three numbers, all reproducible from this repository.
+Four numbers, all reproducible from this repository.
 
-### 1. The engine agrees with Excel: 93 / 93
+### 1. The engine agrees with Excel: 156 / 156
 
 `samples/conformance.xlsx` is generated **by Excel itself**, so the values it carries are
-ground truth. It covers the cases a re-implementation usually gets wrong:
+ground truth. 156 formulas, covering the cases a re-implementation usually gets wrong:
 
 | Case | Excel | Naive implementation |
 |---|---|---|
@@ -121,12 +121,17 @@ ground truth. It covers the cases a re-implementation usually gets wrong:
 | `=SUM("3",4)` | `7` (direct argument coerced) | `4` |
 | `="a">1` | `TRUE` (text sorts after numbers) | error |
 | `="abc"="ABC"` | `TRUE` (case-insensitive) | `FALSE` |
+| `=MOD(-17,5)` | `3` (takes the divisor's sign) | `-2` |
+| `=DATE(2026,14,1)` | rolls into 2027 | error |
+| `=SUMPRODUCT((A="x")*B)` | element-wise, then summed | `#VALUE!` |
+| `=_xlfn.MAXIFS(...)` | the file stores the prefix | unknown function |
+| a date cell vs its serial | the same value | mismatch |
 
 ```bash
 python -m pytest tests/test_engine.py::test_conformance_workbook_matches_excel -q
 ```
 
-### 2. Mutation benchmark: 141 / 141 planted defects found
+### 2. Mutation benchmark: 182 / 182 planted defects found
 
 `bench/benchmark.py` takes twelve structurally different clean workbooks, plants a known
 defect of each kind, has **Excel recalculate every mutant** so the fixture is realistic,
@@ -134,19 +139,21 @@ and then checks whether the right rule reported the right cell.
 
 | Rule | Defect planted | Planted | Found | Recall |
 |---|---|---:|---:|---:|
-| R001 | `SUM` range shortened by one row | 23 | 23 | 100% |
-| R002 | one formula in a copied row hand-edited | 22 | 22 | 100% |
+| R001 | `SUM` range shortened by one row | 22 | 22 | 100% |
+| R002 | one formula in a copied row hand-edited | 16 | 16 | 100% |
 | R006 | two cells referring to each other | 24 | 24 | 100% |
 | R007 | reference to a sheet that is gone | 24 | 24 | 100% |
 | R008 | a number pasted as text inside a total | 24 | 24 | 100% |
 | R012 | a divide-by-zero hidden behind `IFERROR` | 24 | 24 | 100% |
-| | **total** | **141** | **141** | **100%** |
+| R014 | a link into a workbook that is not attached | 24 | 24 | 100% |
+| R015 | a row hidden inside a summed range | 24 | 24 | 100% |
+| | **total** | **182** | **182** | **100%** |
 
-### 3. Silence on healthy files: 0 findings across 1,368 formulas
+### 3. Silence on healthy files: 0 findings across 1,059 formulas
 
 The same twelve clean workbooks — with blank spacer rows, subtotals rolled into a grand
-total, cross-sheet assumptions, `VLOOKUP` tables, percentage rows — produce **zero**
-findings. A checker that cries wolf is one nobody keeps installed.
+total, cross-sheet assumptions, `VLOOKUP` tables, percentage rows, hidden helper columns —
+produce **zero** findings. A checker that cries wolf is one nobody keeps installed.
 
 ```bash
 python bench/make_corpus.py --n 12     # needs Excel; the corpus is committed
@@ -157,6 +164,52 @@ python bench/benchmark.py --per-kind 2 # writes bench/results.json
 > `ROUND` used a relative epsilon to correct binary representation error, which rounded
 > `3,806,241.4967` up to `3,806,242`. It now rounds in decimal. That is the point of
 > having a benchmark.
+
+### 4. Speed: a 23,000-formula model in 7 seconds
+
+`bench/perf.py` builds a synthetic model of a given size and times each stage. On a
+23,000-formula workbook (2,000 line items × 12 months, subtotals and a grand total):
+
+| Stage | ms |
+|---|---:|
+| load and parse | 3,395 |
+| build the dependency graph | 741 |
+| recalculate every formula | 261 |
+| run all 15 rules | 2,524 |
+| **full audit including pricing the fixes** | **7,323** |
+
+That is **88,000 formulas per second** through the evaluator. Half the remaining time is
+openpyxl reading the file twice, which is the price of having Excel's own values to check
+against.
+
+```bash
+python bench/perf.py --rows 2000 --cols 12
+```
+
+Profiling this is what turned up two genuinely quadratic passes: the topological sort
+rebuilt a `set` inside a comprehension, and the double-counting rule scanned every cell of
+every summed range. Fixing those took the same workbook from **37 seconds to 7**.
+
+---
+
+## Where does this number come from?
+
+That is the question a reviewer actually asks, and the dependency graph is what makes it
+answerable. Every finding with a measured impact carries a trace from the number a person
+reads back to the inputs behind it, with the branch that moves highlighted:
+
+```
+* Operating Model!C26   Cost per head             =ROUND(C25/Inputs!B3,0)
+*   Operating Model!C25   Full-year costs           =SUM(C16:N16)
+*     Operating Model!C16   Total operating costs     =SUM(C11:C14)
+*     Operating Model!D16   Total operating costs     =SUM(D11:D14)
+      Operating Model!C11   Salaries & benefits       310000
+      Operating Model!C12   Cloud & infrastructure    64000
+```
+
+The rows marked `*` are the ones whose value changes when the fix is applied. The walk
+starts at the summary line, not at the defect, because "cost per head" is the number
+somebody is asking about.
 
 ---
 
@@ -171,11 +224,13 @@ python bench/benchmark.py --per-kind 2 # writes bench/results.json
 | **R007** | critical | A reference to a deleted row, column or sheet |
 | **R009** | critical | A total whose range swallows a subtotal, double-counting it |
 | **R012** | critical | `IFERROR` hiding a failure that is happening right now |
+| **R014** | critical | A link into a workbook that is not here, so the number is a frozen snapshot |
 | **R013** | critical | A saved value that no longer matches its own formula |
 | **R003** | warning | A rate or assumption typed inside a formula instead of a labelled cell |
 | **R004** | warning | Arithmetic on an empty cell, which silently counts as zero |
 | **R008** | warning | A number stored as text inside a range being totalled |
 | **R011** | warning | `NOW`, `TODAY`, `RAND`, `INDIRECT` or `OFFSET`, which make a result nobody can reproduce |
+| **R015** | warning | A hidden row inside a total, contributing an amount nobody can see |
 | **R010** | info | The same formula duplicated across the workbook |
 
 `gridlint rules` prints this list with the reasoning for each.
@@ -258,18 +313,18 @@ gridlint/
     tokenizer.py      single-pass lexer; every formula tokenizes or raises
     parser.py         precedence climbing, including Excel's two surprises
     values.py         the coercion rules: number/text/bool ordering, decimal rounding
-    functions.py      42 worksheet functions with Excel's range-vs-argument semantics
+    functions.py      90 worksheet functions with Excel's range-vs-argument semantics
     evaluator.py      pure: (node, sheet, resolver) -> value
   workbook.py       loads an .xlsx twice: formulas, and the values the app cached
   engine.py         dependency graph, topological recalculation, cycles, self-check
-  rules/            13 detectors, each yielding Findings with evidence and a Fix
+  rules/            15 detectors, each yielding Findings with evidence and a Fix
   audit.py          runs the rules, prices each fix by recalculation, ranks and groups
   explain.py        the model's three jobs and the fences around them
   apply.py          writes a corrected copy with comments and highlights
   server.py         FastAPI: workspaces, uploads, runs, shared reports
   web/              one HTML file, one stylesheet, one script. No build step.
 bench/              corpus generator, mutation benchmark, results
-tests/              125 tests
+tests/              151 tests
 ```
 
 Design decisions worth knowing:
@@ -289,11 +344,33 @@ Longer notes: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ---
 
+## What it copes with in a real file
+
+Everything on this list broke Gridlint the first time it met one, and each is now covered
+by a test in `tests/test_real_world.py`:
+
+- **Functions Excel added later.** A file using `MAXIFS` stores it as `_xlfn.MAXIFS`.
+  Anything reading the file rather than the screen has to strip that prefix.
+- **Multi-criteria aggregates.** `SUMIFS`, `COUNTIFS`, `AVERAGEIFS`, `MAXIFS`, `MINIFS`,
+  and the `SUMPRODUCT((range="x")*range)` idiom that predates them.
+- **Array arithmetic.** Comparison and arithmetic broadcast element by element when either
+  side is a range, which is what makes that idiom work at all.
+- **Dates as numbers.** Excel stores a date as days since 1899-12-30 and keeps Lotus's
+  belief that 1900 was a leap year. `DATE`, `EOMONTH`, `EDATE`, `DATEDIF` and `WEEKDAY` all
+  go through that serial, and a date-formatted cell compares equal to the number underneath it.
+- **Finance functions.** `NPV`, `IRR` (bisection, so it always converges), `PMT`, `PV`, `FV`.
+- **Structured table references.** `Table1[Amount]` and `Sales[[#Data],[Amount]]` resolve to
+  the range they name and feed the dependency graph like any other reference.
+- **Links into other workbooks.** `[1]Budget!B4` cannot be computed from this file, so
+  Gridlint refuses to guess: R014 reports it, and it does not masquerade as an unknown function.
+- **Hidden rows and columns**, which R015 reports when they sit inside a total.
+- **`=@A1`**, the implicit-intersection marker newer Excel writes.
+
 ## Limits, stated plainly
 
 - **`.xlsx` and `.xlsm` only.** No `.xls`, no `.csv`, no Google Sheets API yet — export to
   `.xlsx` first.
-- **The engine models a subset of Excel**: 42 functions, no array formulas, no pivot
+- **The engine models a subset of Excel**: 90 functions, no array formulas, no pivot
   tables, no macros, no `INDIRECT`/`OFFSET` resolution (they are flagged as unauditable
   instead). Unsupported formulas are listed in the report rather than silently skipped,
   and they lower the self-check score, which in turn makes Gridlint withhold money figures.
@@ -311,7 +388,7 @@ Longer notes: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 ## Tests
 
 ```bash
-python -m pytest -q          # 125 tests, about 40 seconds
+python -m pytest -q          # 151 tests, about 15 seconds
 ```
 
 They cover Excel's coercion and rounding rules directly, the graph and recalculation, each

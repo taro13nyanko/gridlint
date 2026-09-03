@@ -225,6 +225,19 @@ function renderDetail() {
     </div>`);
   }
 
+  if (f.trace?.length) {
+    const head = f.headline_changes?.[0];
+    parts.push(`<div class="detail-sec"><h4>Where ${esc(head ? head.label : 'that number')} comes from</h4>
+      <ol class="trace">${f.trace.map(s => `
+        <li class="${s.changed ? 'moves' : ''}" style="--d:${Math.min(s.depth, 5)}">
+          <span class="t-cell mono">${esc(s.cell.split('!').pop())}</span>
+          <span class="t-label">${esc(s.label || (s.is_input ? 'input' : ''))}</span>
+          <span class="t-formula mono">${esc(s.formula || num(s.value))}</span>
+        </li>`).join('')}</ol>
+      <p class="fine">Highlighted rows are the ones whose value moves when this fix is applied.</p>
+    </div>`);
+  }
+
   if (f.fix_diff?.length) {
     parts.push(`<details class="detail-sec"><summary class="fine">Every cell that changes (${f.impact_cells})</summary>
       <table class="diff"><tbody>${f.fix_diff.map(d =>
